@@ -8,18 +8,18 @@
 \usepackage{caption}
 \usepackage[operators,sets]{cryptocode}
 \usepackage{authblk} % for affiliations
-\usepackage{draftwatermark}
-\usepackage[all,cmtip]{xy}
+% \usepackage{draftwatermark}
+% \usepackage[all,cmtip]{xy}
 
-% Customize the watermark
-\SetWatermarkText{DRAFT}          % The watermark text
-\SetWatermarkScale{5}             % Size (increase for full-page)
-\SetWatermarkColor[gray]{0.85}    % Light gray
-\SetWatermarkAngle{45}            % Diagonal placement
-\SetWatermarkFontSize{5cm}        % Optional: explicit size
-\SetWatermarkLightness{0.9}       % Optional: even lighter
-\SetWatermarkHorCenter{0.5\paperwidth} % Optional: repositioning
-\SetWatermarkVerCenter{0.5\paperheight}
+% % Customize the watermark
+% \SetWatermarkText{DRAFT}          % The watermark text
+% \SetWatermarkScale{5}             % Size (increase for full-page)
+% \SetWatermarkColor[gray]{0.85}    % Light gray
+% \SetWatermarkAngle{45}            % Diagonal placement
+% \SetWatermarkFontSize{5cm}        % Optional: explicit size
+% \SetWatermarkLightness{0.9}       % Optional: even lighter
+% \SetWatermarkHorCenter{0.5\paperwidth} % Optional: repositioning
+% \SetWatermarkVerCenter{0.5\paperheight}
 
 % \newtheorem{thm}{Theorem}[section]
 % \newtheorem{ex}{Example}[section]
@@ -98,7 +98,34 @@
 \newcommand{\one}{\mathbb{1}}
 \newcommand{\zero}{\mathbb{0}}
 
+\newcommand{\bon}{2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P)}
+\newcommand{\btw}{2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda ) \Delta X}
+\newcommand{\bth}{2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)}
+\newcommand{\bfo}{2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X}
+\newcommand{\con}{2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)}
+\newcommand{\ctw}{- 2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))}
+\newcommand{\cth}{2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q)}
+\newcommand{\cfo}{2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))}
 
+\newcommand{\non}{2 y_R \Delta X f(P)f(Q)f_X(R)(4 y_P y_Q  \Delta Y - y_P  \Gamma_Q \Delta X  - y_Q  \Gamma_P \Delta X )}
+\newcommand{\ntw}{\Gamma_R \Delta X f(P)f(Q)f_Y(R)(4 y_P y_Q \Delta Y - y_P \Gamma_Q \Delta X  - y_Q \Gamma_P \Delta X )}
+\newcommand{\nth}{2 y_P y_R \Delta X f(Q)f(R)f_X(P)(\Gamma_Q \Delta X - 2 y_Q \Delta Y)}
+\newcommand{\nfo}{y_R \Gamma_P \Delta X f(Q)f(R)f_Y(P)(\Gamma_Q \Delta X  - 2  y_Q \Delta Y)}
+\newcommand{\nfi}{2 y_Q y_R \Delta X  f(P)f(R)f_X(Q)(\Gamma_P \Delta X - 2 y_P \Delta Y) } 
+\newcommand{\nsi}{y_R \Gamma_Q \Delta X f(P)f(R)f_Y(Q)(\Gamma_P  \Delta X - 2  y_P \Delta Y) }
+
+\newcommand{\den}{y_R f(P)f(Q)f(R)(\Gamma_P\Delta X - 2 y_P \Delta Y)(\Gamma_Q\Delta X - 2 y_Q \Delta Y)}
+
+
+
+
+
+
+
+\newcommand{\VerEquA}{2 y_T \Delta Y  \neq \Gamma_T \cdot \Delta X \text{ for any } T \in \left\{P,Q,R\right\}}
+\newcommand{\VerEquB}{\Delta X \neq  (\Delta X \cdot y_i - \Delta Y \cdot x_i - \Delta X \cdot \mu) A_i \text{ for some }1 \leq i \leq n}
+\newcommand{\VerEquC}{D \cdot D^{-1} \neq 1}
+\newcommand{\VerEquD}{\left(\sum_{i=1}^{6} N_i\right) D^{-1} \neq \sum_i m_i A_i}
 
 
 
@@ -122,43 +149,53 @@ SLVer Bullet: \underline{S}traight-\underline{L}ine \underline{Ver}ification for
 \maketitle
 
 
-\section*{Disclaimer}
+% \section*{Disclaimer}
 
-This paper is not yet completed; future updates to this document are forthcoming soon.
+% This paper is not yet completed; future updates to this document are forthcoming soon.
+
+\section*{Change log}
+
+This document will be updated occasionally, especially when security-sensitive results come to light. We summarize such changes here.
+\begin{itemize}
+
+\item 22 July 2025. Fixed typos and improved notation overall, added computational improvement arguments, added section on interpolation, rederived equations and improved operation count.
+
+
+\item 28 June 2025. Fix broken proofs, many mistakes, tighten bounds, fill in some gaps, etc.
+
+\item 11 June 2025. Initial preprint.
+\end{itemize}
+
 
 \section{Introduction}
 
 
-In \cite{Eagen}, Eagen proposed a method for checking whether a sum of points in an elliptic curve group has been computed correctly. Eagen's method verifiably checks elliptic curve group operations only with linear combinations in the base field, allowing very general proofs to be encoded in inner product argument systems and rank-$1$ constraint systems (R1CS). We call this method ``straight-lining,'' due to how it utilizes straight lines in the verification procedure.
-% \free{We refer to this process as utilizing ``straight lines,'' hence the title.}
-We present a method based on \cite{Eagen} for straight-lining  cryptographic protocols, offloading computational costs faced by verifiers to provers, which is useful when verification use light-weight devices or when verification must be performed repeatedly.
+In \cite{Eagen}, Eagen proposed a method for checking whether a sum of points in an elliptic curve group has been computed correctly. Eagen's method verifiably checks elliptic curve group operations only with linear combinations in the base field, allowing very general proofs to be encoded in inner product argument systems and rank-$1$ constraint systems (R1CS). We call this method ``straight-line verification,'' due to how it utilizes straight lines in the verification procedure.
+In \cite{Kayaba}, Parker used Eagen's method in a R1CS to verify scalar multiplication of group elements, proposing a protocol based on Eagen's arguments. 
+Although the iterative witness construction algorithm proposed in \cite{Eagen} is correct, the arguments are rather informal, lacking precise protocol descriptions, claims, proofs, or efficiency analyses. 
+We present a method based on \cite{Eagen} for straight-lining  cryptographic protocols, offloading computational costs faced by verifiers to provers, which is useful for light-weight devices or when verification must be performed repeatedly. Computational improvements are largely due to replacing expensive division operations with lower-cost arithmetic by applying logarithmic derivatives.
 
 
-Although the iterative witness construction algorithm proposed in \cite{Eagen} is correct, \cite{Eagen} is rather informal, lacking precise protocol descriptions, claims, proofs, or efficiency analyses. In \cite{Kayaba}, Parker used Eagen's method in a R1CS s to verify  scalar multiplication of group elements, proposing a protocol based on Eagen's arguments. In \cite{SoundnessForDLP}, Bassa contributed towards formalizing Eagen's method, explicitly describing Parker's proof of scalar multiplication and sketching arguments towards proofs of soundness.
-
+Our work is not fully novel, but is a healthy expansion of previous work. In \cite{SoundnessForDLP}, Bassa contributed towards formalizing Eagen's method, explicitly describing Parker's proof of scalar multiplication and sketching arguments towards proofs of soundness.
 % We expressly compute the completeness and soundness error for this approach, because, while welcome, we do not believe that Bassa's analysis was without errors.
 % We then apply this approach to zero-knowledge proof systems to highlight the computational advantage offered by divisors, offloading the bulk of the computational bottleneck on the verifier's side to the prover.
 % In particular, we implement the divisors framework with the Schnorr scheme and Bulletproofs, as they are most applicable to cryptocurrencies such as Monero or Salvium, though note that these are not the only protocols who may benefit from this perspective.
-
-
-
 % We formalize a divisors-based modification to an existing proof-of-computation scheme. The original scheme, described first publicly by Eagen in \cite{Eagen}, checks whether a sum of points in some elliptic curve group $\G$ defined over a finite field $K$ has been computed correctly, using only linear combinations over $K$. The approach allows for pre-computation, so that users of a zero-knowledge proving scheme may optionally offload computational cost from verifiers to provers.
 % In \cite{Kayaba}
 % This approach was utilized in Parker \cite{Kayaba} for proving group point relationships within rank $1$ constraint systems. 
+However, the soundness arguments in \cite{SoundnessForDLP} are not without  obstacles. In \cite{Eagen}, rational solutions to certain systems of polynomial equations are assumed to exist.
+These equations do not admit rational solutions in general. Bassa lifted to the surface of pairs of elliptic curve group points to avoid this problem, but the verification equations proposed in \cite{Eagen} and studied in \cite{SoundnessForDLP} are not sufficiently justified in those documents. 
 
 
-However, the soundness arguments in \cite{SoundnessForDLP} are not without  obstacles. In \cite{Eagen}, rational solutions to certain systems of polynomial equations are assumed to exist, however this assumption is not wholly accurate.
-Indeed, these equations do not admit rational solutions in general, so the verification equations proposed in \cite{Eagen} and studied in \cite{SoundnessForDLP} remain unjustified. Bassa lifted to the surface of pairs of elliptic curve group points, which partially resolves this problem. 
-
-Nonetheless, Bassa's amended approach results in alterations to the verification equations of \cite{Eagen}, which he does not substantiate. We formalize the correct verification equations, and consider the security of Eagen's approach. We present a corrected version of the general protocol, and explicitly compute the completeness and soundness errors. We remark on how to complete the scheme, and our soundness error beats previous estimates in \cite{Eagen} and \cite{SoundnessForDLP}.
-
-We show how the corrected scheme can be used to verify scalar multiplication as in Parker's proposed protocol.
-We then apply this approach to zero-knowledge proof systems to illustrate the computational advantage offered by divisors. 
-In particular, the prover can pre-compute division operations for the verifier, which are the computational bottlenecks on the verifier's side.
+The verification equations described in \cite{SoundnessForDLP} reduce to our verification equations, and therefore are equivalent. In particular, given a variable choice of a line in the affine plane with three distinct, non-identity, and collinear points on an elliptic curve $\E$, say $P, Q, R$ with interpolating slope $\lambda$ and $x$-coordinates $X_P$, $X_Q$, and $X_R$, are necessarily dependent: $\lambda^2 = X_P + X_Q + X_R$. Thus, given any derivation $d$ on the function field $K(\E)$ over $K$, we have $dX_R = -dX_P - dX_Q$, allowing computations to reduce further than in \cite{SoundnessForDLP}.
 
 
-We transform the interactive Schnorr identification protocol \cite{Schnorr} and interactive Bulletproofs range-proving protocol \cite{Bullet} in order to highlight the computational benefits of this corrected divisors procedure, then benchmark its efficiency.
-We choose Schnorr and Bulletproofs because these protocols are simple, secure, popular, and readily applicable in cryptocurrencies such as Monero or Salvium.  
+Nonetheless, Bassa's amended approach results in formal arguments, if not proofs, of security. We fully justify the verification equations presented by Bassa, show they reduce further, and reconsider the security of Eagen's approach under the reduced verification equations. We encourage the reader to keep in mind that our verification equations are equivalent reduced versions of those presented by Bassa. Along the way, we exploit the technique in \cite{Eagen} further to reduce the total number of field divisions required by prover to one. The technique is easily applied to transform verification in 
+discrete-logarithm-based protocols for generic speed-ups.
+
+We present the protocol, and explicitly compute the completeness and soundness errors. We remark on how to complete the scheme, and our soundness error beats previous estimates in \cite{Eagen} and \cite{SoundnessForDLP}.
+We also show how the corrected scheme can be used to verify scalar multiplication as in Parker's proposed protocol.
+We then apply this approach to zero-knowledge proof systems like Schnorr identification and Bulletproofs to illustrate the computational advantage offered by divisors, because these protocols are simple, secure, popular, and readily applicable in cryptocurrencies such as Monero or Salvium. 
 % The efficiency gains here are most applicable to currencies such as Monero or Salvium, though note that these are not the only protocols who may benefit from this perspective,
 
 
@@ -168,25 +205,15 @@ We choose Schnorr and Bulletproofs because these protocols are simple, secure, p
 % This offloads the bulk of the computational cost faced by verifiers to the prover.
 % The transformation is somewhat general, but we exemplify the approach with a transformed Schnorr identification protocol and a transformed range proving system via bulletproofs. The Schnorr and bulletproofs protocols  are simple, secure, popular, and applicable (as in cryptocurrencies like Monero or Salvium), so they make for good demonstrations. We then analyze the efficiency of the approach against the un-transformed versions of these protocols.
 
-\subsection{Change log}
+\section{Notation and Preliminary Definitions}
 
-This document will be updated occasionally, especially when security-sensitive results come to light. We summarize such changes here.
-\begin{itemize}
-\item 28 June 2025. Fix broken proofs, many mistakes, tighten bounds, fill in some gaps, etc.
+We begin assuming the reader has knowledge of basic algebra concepts related to groups, rings, and fields. Our notation and background primarily follows \cite{Silverman}, but we depart notationally in a few notable ways, especially with regard to divisors. Let $\N = \left\{1, 2, 3, \dots\right\}$, let $\N_0 = \N \cup \left\{0\right\}$, and let $\mathbb{Z}_p$ be the ring of integers modulo prime $p$. 
+% All sets herein are finite unless otherwise specified. 
+Let $\zero$ and $\one$ represent the vectors solely composed of zeroes and ones, respectively. 
 
-\item 11 June 2025. Initial preprint.
-\end{itemize}
+\subsection{Polynomials and Rational Functions}
 
-
-\section{Notation and preliminary definitions}
-
-We begin assuming the reader has knowledge of basic algebra concepts related to groups, rings, and fields. Our notation and background primarily follows \cite{Silverman}, but we depart notationally in a few notable ways, especially with regard to divisors. Let $\N = \left\{1, 2, 3, \ldots\right\}$ and $\N_0 = \N \cup \left\{0\right\}$. All sets herein are finite unless otherwise specified. 
-
-\subsection{Polynomials and rational functions}
-
-For a set $S$, we use $x \lsamp S$ to mean that the element $x$ is an independent uniformly-distributed sample from set $S$.
-Let $\one$ and $\zero$ be the vectors of all $1$'s and $0$'s, respectively.
-For a ring $R$, we write $R^\times = R\setminus\left\{0\right\}$ to denote the multiplicative subgroup. 
+For a set $S$, we use $x \lsamp S$ to mean that the element $x$ is an independent uniformly-distributed sample from set $S$. For a ring $R$, we write $R^\times = R\setminus\left\{0\right\}$ to denote the multiplicative subgroup. 
 Let $p$ be a prime, $K$ a finite field with $\text{char}(K) = p$, algebraic closure $\overline{K}$, and multiplicative subgroup $K^\times = \left\{x \in K \mid x \neq 0\right\}$. Let $X, Y, Z$ be indeterminates over $\overline{K}$. Finite linear combinations in products of $X$, $Y$, and $Z$ are \textit{polynomials}. We use the following usual notation for rings of polynomials over $\overline{K}$ and $K$.
 \begin{itemize}
 
@@ -200,22 +227,17 @@ Let $p$ be a prime, $K$ a finite field with $\text{char}(K) = p$, algebraic clos
 
 \end{itemize}  
 
-For $f \in \polys$, say $f = \sum_i \sum_j a_{ij} X^iY^j$, define $\text{deg}(f) = \max \left\{i+j \mid a_{ij} \neq 0\right\}$ (and similarly for the other polynomial rings). Each of these rings (say $R$) admits a structure-preserving map $\text{deg}:R \to \N_0 = \N \cup \left\{0\right\}$ such that $\text{deg}(fg) = \text{deg}(f) + \text{deg}(g)$, $\text{deg}(f+g) \leq \max\left\{\text{deg}(f), \text{deg}(g)\right\}$. Also, $\text{deg}(f) = 0$ if and only if $f = 0$.
+For $f \in \polys$, say $f = \sum_i \sum_j a_{ij} X^iY^j$, define $\text{deg}(f) = \max \left\{i+j \mid a_{ij} \neq 0\right\}$ (and similarly for the other polynomial rings). Each of these rings (say $R$) admits a structure-preserving map $\text{deg}:R \to \N_0 = \N \cup \left\{0\right\}$ such that $\text{deg}(fg) = \text{deg}(f) + \text{deg}(g)$ and $\text{deg}(f+g) \leq \max\left\{\text{deg}(f), \text{deg}(g)\right\}$, where we follow the convention that the degree of the zero polynomial is $- \infty$. Also, $\text{deg}(f) = 0$ if and only if $f$ is a non-zero constant polynomial.
 
 
-If $d \in \mathbb{N}_0$ and $f \in \overline{K}[X,Y]$, and there exists some $\lambda \in \overline{K}^\times$ such that $f(\lambda X, \lambda Y) = \lambda^d f(X,Y)$, then we say $f$ is \textit{homogeneous with degree} $d$; otherwise, \textit{inhomogeneous}. Define an equivalence relation on the subset of homogeneous polynomials in $\overline{K}[X,Y,Z]$ such that every $f(X,Y,Z)$ relates to $f(\lambda X, \lambda Y, \lambda Z)$ for every $\lambda \in \overline{K}^\times$. Denote the equivalence class of $f$ under this equivalence relation with $f(X\!:\!Y\!:\!Z)$, and the set of equivalence classes under this relation with $\overline{K}[X\!:\!Y\!:\!Z]$.
-Define $\text{deg}:\overline{K}[X:Y:Z] \to \N_0$ by declaring $\text{deg}(f(X\!:\!Y\!:\!Z)) = \text{deg}(f(X,Y,Z))$. Similarly define $K[X\!:\!Y\!:\!Z]$ and its degree function. The rings $\overline{K}[X,Y]$, $K[X,Y]$, $\overline{K}[X,Y,Z]$, $K[X,Y,Z]$, $\overline{K}[X\!:\!Y\!:\!Z]$, and $K[X\!:\!Y\!:\!Z]$ are all integral domains. 
+If $d \in \mathbb{N}_0$ and $f \in \overline{K}[X,Y]$, and for all $\lambda \in \overline{K}^\times$ we have that $f(\lambda X, \lambda Y) = \lambda^d f(X,Y)$, then we say $f$ is \textit{homogeneous with degree} $d$; otherwise, \textit{inhomogeneous}. Define an equivalence relation on the subset of homogeneous polynomials in $\overline{K}[X,Y,Z]$ such that every $f(X,Y,Z)$ relates to $\lambda f(X, Y, Z)$ for every $\lambda \in \overline{K}^\times$. Denote the equivalence class of $f$ under this equivalence relation with $f(X\!:\!Y\!:\!Z)$, and the set of equivalence classes under this relation with $\overline{K}[X\!:\!Y\!:\!Z]$.
+Define $\text{deg}:\overline{K}[X\!:\!Y\!:\!Z] \to \N_0$ by declaring $\text{deg}(f(X\!:\!Y\!:\!Z)) = \text{deg}(f(X,Y,Z))$. Similarly define $K[X\!:\!Y\!:\!Z]$ and its degree function. 
+The rings $\overline{K}[X,Y]$, $K[X,Y]$, $\overline{K}[X,Y,Z]$, and $K[X,Y,Z]$ are all integral domains. We also define the respective fields of rational functions $\overline{K}(X,Y)$, $K(X,Y)$, $\overline{K}(X,Y,Z)$, and $K(X,Y,Z)$ as usual.
 
 
-We also define the respective field extensions of rational functions $\overline{K}(X,Y)$, $K(X,Y)$, $\overline{K}(X,Y,Z)$, and $K(X,Y,Z)$ as usual. We define the multiplicities of roots and poles of elements of $K(X,Y)$ as usual; multiplicity theory is a rich rabbit hole preceding Zariski, so we do not go into further detail.
-Given $P = (x,y) \in \overline{K}^2$, there exists a map $\text{ord}_P:\overline{K}(X,Y) \to \Z$ called the \textit{order of vanishing} at $P$ defined as follows.
-\begin{align}
-\text{ord}_P(f) =& \begin{cases} m > 0; & P\text{ is a root of }f\text{ with multiplicity }m \\ m < 0; & P\text{ is a pole of }f\text{ with multiplicity }\left|m\right|=-m \\ 0; & \text{otherwise} \end{cases}
-\end{align} We define $\text{ord}_P(f)$ for subrings of $\overline{K}(X,Y)$ by restricting $\text{ord}_P$.
 
-In the sequel, we use the distinguished family of polynomials parameterized by $\alpha, \beta \in K^2$ of the form $e = Y^2 - X^3 - \alpha X - \beta \in K[X,Y]$ such that $4\alpha^3 + 27\beta^2 \neq 0$; these are exactly the non-singular elliptic curves.
 
-\subsection{Affine and projective planes}
+\subsection{Affine and Projective Planes}
 
 Define $\A^2(\overline{K}) = \left\{(x,y) \in \overline{K}^2\right\}$, $\A^3(\overline{K}) = \left\{(x,y,z) \in \overline{K}^3\right\}$, $\A^2(K) = \left\{(x,y) \in K^2\right\}$, and $\A^3(K)=\left\{(x,y,z) \in K^3\right\}$.  We say the elements of $\mathbb{A}^2(\overline{K})$ are \textit{affine points} and the elements of $\mathbb{A}^2(K)$ are \textit{$K$-rational} affine points. 
 For any ideal $I \subseteq \overline{K}[X,Y]$, the \textit{affine vanishing set} of $I$ is  $v_a(I) = \left\{(x,y) \in \mathbb{A}^2(\overline{K}) \mid f(x,y) = 0\text{ for all } f \in I\right\}$. If $f(X,Y) \in \overline{K}[X,Y]$, we define the affine vanishing set for $f$ as the affine vanishing set for the principally generated $I = (f)$, which we denote with $v_a(f)$.
@@ -231,9 +253,9 @@ Define an equivalence relation on $\A^3(\overline{K}) \setminus \left\{\zero\rig
 
 
 
-Given a projective vanishing set $V$, we overload notation and define $I(V)$ to be the homogeneous ideal of $\overline{K}[X\!:\!Y\!:\!Z]$ generated by the set $\left\{f \in \overline{K}[X\!:\!Y\!:\!Z] \mid f(x\!:\!y\!:\!z) = 0\text{ for all }(x\!:\!y\!:\!z) \in V\right\}$.
-We say a projective vanishing set $V$ is \textit{defined over} $K$, denoted with shorthand $V/K$, if $I(V)$ is generated as an ideal in $\overline{K}[X\!:\!Y\!:\!Z]$ by a subset of $K[X\!:\!Y\!:\!Z]$. 
-We say $V$ is a \textit{projective variety} if its homogeneous ideal $I(V)$ is a prime ideal in $\overline{K}[X,Y,Z]$. The \textit{projective coordinate ring} of an projective variety $V/K$ is the quotient ring $K[V] = \frac{K[X\!:\!Y\!:\!Z]}{I(V/K)}$. %The \textit{function field} of $V$ is the field of fractions $K(V)$, i.e.\ the set of all formal fractions $\frac{f}{g}$ where $f, g \in K[V]$ and $g \neq 0$, under an equivalence relation defined by relating $\frac{f_1}{g_1}$ to $\frac{f_2}{g_2}$ if and only if $f_1 g_2 - f_2 g_1 = 0$.
+% Given a projective vanishing set $V$, we overload notation and define $I(V)$ to be the homogeneous ideal of $\overline{K}[X\!:\!Y\!:\!Z]$ generated by the set $\left\{f \in \overline{K}[X\!:\!Y\!:\!Z] \mid f(x\!:\!y\!:\!z) = 0\text{ for all }(x\!:\!y\!:\!z) \in V\right\}$.
+% We say a projective vanishing set $V$ is \textit{defined over} $K$, denoted with shorthand $V/K$, if $I(V)$ is generated as an ideal in $\overline{K}[X\!:\!Y\!:\!Z]$ by a subset of $K[X\!:\!Y\!:\!Z]$. 
+% We say $V$ is a \textit{projective variety} if its homogeneous ideal $I(V)$ is a prime ideal in $\overline{K}[X,Y,Z]$. The \textit{projective coordinate ring} of an projective variety $V/K$ is the quotient ring $K[V] = \frac{K[X\!:\!Y\!:\!Z]}{I(V/K)}$. %The \textit{function field} of $V$ is the field of fractions $K(V)$, i.e.\ the set of all formal fractions $\frac{f}{g}$ where $f, g \in K[V]$ and $g \neq 0$, under an equivalence relation defined by relating $\frac{f_1}{g_1}$ to $\frac{f_2}{g_2}$ if and only if $f_1 g_2 - f_2 g_1 = 0$.
 
 
 Affine points $P=(x,y) \in \A^2(\overline{K})$ (or $\A^2(K)$, respectively) naturally map to projective points $P^*=(x\!:\!y\!:\!1) \in \P^2(\overline{K})$ (or $\P^2(K)$, respectively). This map is injective, but $\P^2$ contains many copies of $\A^2$ and this map is not unique. Projective points $P=(x\!:\!y\!:\!z) \in \P^2(\overline{K})$ with $z \neq 0$ naturally map to affine points $P_*=(\frac{x}{z}, \frac{y}{z}) \in \A^2(\overline{K})$ in a similar way, but surjectively. The same statement as above holds with $\A^2(K)$ and $\P^2(K)$ replacing their counterparts everywhere.
@@ -242,45 +264,55 @@ There exists natural \textit{homogenization} maps carrying $f \in \polys$ (or $f
 We can also dehomogenize a homogeneous polynomial $g \in \hpolys$ (or $\overline{K}[X,Y,Z]$) to a polynomial in the affine coordinate ring $g \mapsto g_*(X,Y) = g(X\!:\!Y\!:\!1) \in \polys$ (or $\overline{K}[X,Y]$, respectively). This map is surjective.
 The distinguished polynomial $e(X,Y) = Y^2 - X^3 - \alpha X - \beta$ has homogenization $e^*(X,Y) = Y^2Z - X^3 - \alpha XZ^2 - \beta Z^3$. The map $(x,y) \hookrightarrow (x\!:\!y\!:\!1)$ sends zeroes of $f \in K[X,Y]$ to zeroes of $f^* \in K[X\!:\!Y\!:\!Z]$.
 
-Using these maps, we can translate $\A^2$ to $\P^2$ and back again.  In this way, we define \textit{projective closure} of an affine variety $V$ as the projective vanishing set $\overline{V}$ such that $I(\overline{V}) = \left\{f^* \mid f \in I(V)\right\}$. We also define the function field for a projective variety $V \subseteq \P^2$ as the function field for the affine restriction\footnote{This restriction is more delicate in general than discussed here; see \cite{Silverman}.}.
+Using these maps, we can translate $\A^2$ to $\P^2$ and back again.  In this way, we define \textit{projective closure} of an affine variety $V$ as the projective vanishing set $\overline{V}$ such that $I(\overline{V}) = \left\{f^* \mid f \in I(V)\right\}$. We also define the function field for a projective variety $V \subseteq \P^2$ as the function field for the affine restriction \footnote{This restriction is more delicate in general than discussed here; see \cite{Silverman}.}.
 
 % We define function fields for product varieties $V^n$ in the natural way as in \cite{Silverman}, namely 
 
-\subsection{Plane curves}
+\subsection{Plane Curves}
 \label{sec:planecurve}
 
-A \textit{plane affine curve} $\F$ is just the affine vanishing set of some $f \in \overline{K}[X,Y]$, i.e.\ $\F = v_a(f)$. Define $\text{deg}(\F) = \text{deg}(f)$. Plane affine curves may have any of the properties of affine vanishing sets discussed above. 
-A \textit{plane projective curve} $\F$ is just the projective vanishing set of some homogeneous $f \in \overline{K}[X\!:\!Y\!:\!Z]$, i.e.\ $\F = v_p(f)$. Define $\text{deg}(\F) = \text{deg}(f)$. Plane projective curves may have any of the properties of projective vanishing sets discussed above. 
+A \textit{plane affine curve} $\F$ is just the affine vanishing set of some $f \in \overline{K}[X,Y]$, i.e.\ $\F = v_a(f)$.  If $g$ is a multiplicative factor of $f$, then the curve $\mathcal{G}$ corresponding to $g$ is called a \textit{component} of $\mathcal{F}$.
 
-Recall the distinguished family of polynomials $e = Y^2 - X^3 - \alpha X - \beta \in K[X,Y]$ such that $4\alpha^3 + 27\beta^2 \neq 0$. Define $\E=v_p(e)$ as the plane projective curve of the homogenization $e^*$. It is easy to show that the only $(x\!:\!y\!:\!z) \in \E$ with $z=0$ is $(0\!:\!1\!:\!0)$.  We call this the \textit{point at infinity} on $\E$, and we denote $O = (0\!:\!1\!:\!0)$. It is also easy to show that $\E$ is a projective variety, $I(\E/K) = (e) \subseteq K[X\!:\!Y\!Z]$ is the associated ideal over $K$, and the associated function field is as follows.
+We define the \textit{intersection number} of a curve $\F$, simple/non-singular points of $\F$, singular points of $\F$, and the multiplicity of a point $P$ on $\F$ as in \cite{hirschfeld2008algebraic}. In particular, if $\ell \in \overline{K}[X,Y]$ is a line which is not a component of $\mathcal{F}$, the \textit{multiplicity} of $P$ is $\min{m \mid \ell\text{ a line through }P}$ where $m$ is the intersection number of $\ell$ and $\F$ at $P$. Multiplicity theory is a rich rabbit hole  preceding Zariski, so we do not go into further detail. 
+% Moreover, given $P = (x,y) \in \overline{K}^2$, there exists a map $\text{ord}_P:\overline{K}(X,Y) \to \Z$ called the \textit{order of vanishing} at $P$ defined as follows.
+% \begin{align}
+% \text{ord}_P(f) =& \begin{cases} m > 0; & P\text{ is a root of }f\text{ with multiplicity }m \\ m < 0; & P\text{ is a pole of }f\text{ with multiplicity }\left|m\right|=-m \\ 0; & \text{otherwise} \end{cases}
+% \end{align} We define $\text{ord}_P(f)$ for subrings of $\overline{K}(X,Y)$ by restricting $\text{ord}_P$.
+
+In the sequel, we use the distinguished family of polynomials parameterized by $\alpha, \beta \in K^2$ of the form $e = Y^2 - X^3 - \alpha X - \beta \in K[X,Y]$ such that $4\alpha^3 + 27\beta^2 \neq 0$; these are exactly the non-singular elliptic curves. We note that some authors consider the term ``elliptic curve" to refer specifically to non-singular elliptic curves, while others do not; see \cite{Silverman,DummitNotes}. While we make a distinction for pedagogical reasons, we do not consider singular elliptic curves here.
+
+Plane affine curves may have any of the properties of affine vanishing sets discussed above. 
+A \textit{plane projective curve} $\F$ is just the projective vanishing set of some homogeneous $f \in \overline{K}[X\!:\!Y\!:\!Z]$, i.e.\ $\F = v_p(f)$. In both cases, we define $\text{deg}(\F) = \text{deg}(f)$. Plane projective curves may have any of the properties of projective vanishing sets discussed above. 
+
+Recall the distinguished family of polynomials $e = Y^2 - X^3 - \alpha X - \beta \in K[X,Y]$ such that $4\alpha^3 + 27\beta^2 \neq 0$. Define $\E=v_p(e)$ as the plane projective curve of the homogenization $e^*$. It is easy to show that the only $(x\!:\!y\!:\!z) \in \E$ with $z=0$ is $(0\!:\!1\!:\!0)$.  We call this the \textit{point at infinity} on $\E$, and we denote $O = (0\!:\!1\!:\!0)$. It is also easy to show that $\E$ is a projective variety, $I(\E/K) = (e) \subseteq K[X\!:\!Y\!:\!Z]$ is the associated ideal over $K$, and the associated function field is as follows.
 \begin{align}
-K(\E) =& \left\{\frac{f(X,Y) + I(\E/K)}{g(X,Y) + I(\E/K)} \mid f, g \in K[X,Y], g \notin I(\E/K)\right\}
+K(\E) =& \left\{\frac{f(X,Y) + (e)}{g(X,Y) + (e)} \mid f, g \in K[X,Y], g \notin (e) \right\}
 \end{align}
 
-Except in the case of confusion or for clarification, we often omit the ideal $I(\E/K)$ from our notation in the sequel, with the understanding that the numerator and denominator of every element in the function field is a coset modulo this ideal.
+Except in the case of confusion or for clarification, we often omit the ideal $(e)$ from our notation in the sequel, writing $f/g \in K(\E)$, with the understanding that the numerator and denominator of every element in the function field is a coset modulo this ideal.
 
 However, representing a function field element with coefficient representations of two arbitrary bivariate polynomials is expensive. Indeed if $m = \text{deg}(f)$ and $f$ is bivariate, then we can write $f = \sum_{i=0}^{m} \sum_{j=0}^{i} c_{i,j}X^{i-j}Y^j$, requiring $1 + 2 + 3 + \cdots + m + (m+1) = \frac{1}{2}(m+1)(m+2)$ coefficients from $K$. Thus, if $\text{deg}(f), \text{deg}(g) \leq m$, then we can represent $\frac{f}{g}$ with $(m+1)(m+2)$ coefficients from $K$. On the other hand, more efficient representations are available. Indeed, if $f \in K[X,Y]$, then as $K[X,Y] = K[X][Y]$, we have the following.
-\begin{align}
+\begin{align*}
 f(X,Y)
 =& \sum_{j=0}^{m} b_{j}(X)Y^j\text{ where }b_j \in K[X]\text{ for }0 \leq j \leq m  \\
 =& \sum_{j=0}^{\lceil m/2\rceil} b_{2j}(X)Y^{2j} + b_{2j+1}(X)Y^{2j+1} \text{ where }b_{m+1}=0\\
-=& \sum_{j} Y^{2j}\left(b_{2j}(X) + b_{2j+1}(X)Y\right)\\
-=& \sum_j \left(X^3 + \alpha X + \beta\right)^j\left(b_{2j}(X) + b_{2j+1}(X)Y\right) \\
-=& \underbrace{\left(\sum_j \left(X^3 + \alpha X + \beta\right)^jb_{2j}(X)\right)}{} + \underbrace{\left(\sum_j \left(X^3 + \alpha X + \beta\right)^jb_{2j+1}(X)\right)}{}Y \\
+=& \sum_{j=0}^{\lceil m/2\rceil} Y^{2j}\left(b_{2j}(X) + b_{2j+1}(X)Y\right)\\
+=& \sum_{j=0}^{\lceil m/2\rceil} \left(X^3 + \alpha X + \beta\right)^j\left(b_{2j}(X) + b_{2j+1}(X)Y\right) \\
+=& \underbrace{\left(\sum_{j=0}^{\lceil m/2\rceil} \left(X^3 + \alpha X + \beta\right)^jb_{2j}(X)\right)}{} + \underbrace{\left(\sum_{j=0}^{\lceil m/2\rceil} \left(X^3 + \alpha X + \beta\right)^jb_{2j+1}(X)\right){}Y} \\
 =& \quad \quad \quad \quad \quad \quad a(X)  \quad \quad \quad \quad \quad \quad + \quad \quad \quad \quad \quad \quad b(X)Y
-\end{align} where $a(X) = \sum_{j=0}^{\lceil m/2\rceil} (X^3 + \alpha X + \beta)^j b_{2j}(X) \in K[X]$ and $b(X) = \sum_{j=0}^{\lceil m/2\rceil} (X^3 + \alpha X + \beta)^j b_{2j+1}(X) \in K[X]$. Representing a polynomial $f$ this way requires $\text{deg}(a) + \text{deg}(b)+2$ elements of $K$. So, we can forget our above representation of elements of the function field $\frac{f}{g}$ with $f, g \in K[X,Y]$, and use $\frac{a_1(X) + b_1(X)Y}{a_2(X) + b_2(X)Y}$ for some $a_1, a_2, b_1, b_2 \in K\left[X\right]$, representing the function field element with only $\text{deg}(a_1)+\text{deg}(a_2)+\text{deg}(b_1)+\text{deg}(b_2)+4$ elements of $K$ instead. 
+\end{align*} where $a(X) = \sum_{j=0}^{\lceil m/2\rceil} (X^3 + \alpha X + \beta)^j b_{2j}(X) \in K[X]$ and $b(X) = \sum_{j=0}^{\lceil m/2\rceil} (X^3 + \alpha X + \beta)^j b_{2j+1}(X) \in K[X]$. Representing a polynomial $f$ this way requires $\text{deg}(a) + \text{deg}(b)+2$ elements of $K$. So, we can forget our above representation of elements of the function field $\frac{f}{g}$ with $f, g \in K[X,Y]$, and use $\frac{a_1(X) + b_1(X)Y}{a_2(X) + b_2(X)Y}$ for some $a_1, a_2, b_1, b_2 \in K\left[X\right]$, representing the function field element with only $\text{deg}(a_1)+\text{deg}(a_2)+\text{deg}(b_1)+\text{deg}(b_2)+4$ elements of $K$ instead. 
 
 We may go further, however. For each $a(X) + b(X)Y + (e)$, we have an element $a(X) - b(X)Y + (e) \in \polys/(e)$ satisfying the following due to the ideal $I(\E/K) = (e)$ and the multiplicative absorption property of ideals.
-\begin{align}
+\begin{align*}
 (a_1(X) + b_1(X)Y + (e))(a_1(X) - b_1(X)Y + (e)) =& a_1^2 - b_1^2Y^2 + (e) \\
 =& a_1^2 - (X^3 + \alpha X + \beta)b_1^2 + (e)
-\end{align}
-Hence, for any $\frac{a_1(X)+b_1(X)Y + (e)}{a_2(X)+b_2(X)Y + (e)} \in K(\E)$, we can apply an identity map by multiplying and dividing by $(a_2(X) - b_2(X)Y + (e))$, yielding another representative whose denominator does not depend on $X$ as follows
-\begin{align}
+\end{align*}
+Hence, for any $\frac{a_1(X)+b_1(X)Y + (e)}{a_2(X)+b_2(X)Y + (e)} \in K(\E)$, we can apply an identity map by multiplying and dividing by $(a_2(X) - b_2(X)Y + (e))$, yielding another representative whose denominator does not depend on $Y$ as follows
+\begin{align*}
 & \frac{a_1(X)+b_1(X)Y + (e)}{a_2(X)+b_2(X)Y + (e)} \cdot \frac{a_2(X)-b_2(X)Y + (e)}{a_2(X)-b_2(X)Y + (e)} \\ &= \frac{a_1(X)a_2(X) - a_1(X) b_2(X) Y + a_2(X)b_1(X) Y - b_1(X) b_2(X) Y^2 + (e)}{(a_2(X))^2 - (b_2(X))^2Y^2 + (e)} \\
 % =& \frac{a_0a_1 - (X^3 + \alpha X + \beta)b_0b_1 - (a_0b_1 - a_1b_0)Y+(e)}{a_1^2 - (X^3 + \alpha X + \beta)b_2^2+(e)}\\
 &= \frac{f_1(X) + f_2(X)Y + (e)}{f_3(X) + (e)}
-\end{align} where $f_1(X) = a_1(X) a_2(X) - (X^3 + \alpha X + \beta)b_1(X)b_2(X)$, $f_2(X) = a_2(X)b_1(X) - a_1(X) b_2(X)$, and $f_3(X) = (a_2(X))^2 - (X^3 + \alpha X + \beta)(b_2(X))^2$. This requires only $\text{deg}(f_1(X))+\text{deg}(f_2(X))+\text{deg}(f_3(X))+3$ elements of $K$.
+\end{align*} where $f_1(X) = a_1(X) a_2(X) - (X^3 + \alpha X + \beta)b_1(X)b_2(X)$, $f_2(X) = a_2(X)b_1(X) - a_1(X) b_2(X)$, and $f_3(X) = (a_2(X))^2 - (X^3 + \alpha X + \beta)(b_2(X))^2$. This requires only $\text{deg}(f_1(X))+\text{deg}(f_2(X))+\text{deg}(f_3(X))+3$ elements of $K$.
 
 Thus, we write every element of $K(\E)$ as $\frac{f_1(X) + f_2(X)Y + (e)}{f_3(X) + (e)}$ for some polynomials $f_0(X)$, $f_1(X)$, $f_2(X) \in K[X]$.
 Later, we outperform this slightly, as we practically only consider elements such that $\text{deg}(f_3(X) + (e)) = 0$, i.e.\ $f_3(X) + (e) = 1 + (e)$, requiring only $\text{deg}(f_1)+\text{deg}(f_2)+2$ coefficients to describe $f$.
@@ -348,24 +380,29 @@ Later, we outperform this slightly, as we practically only consider elements suc
 
 % Of course, storing $f(X,Y)$ and $g(X,Y)$ requires $O(\text{deg}(f)^2 + \text{deg}(g)^2)$ coefficients, but describing each $f_i$ requires only $\text{deg}(f_i)$ coefficients. This representation reduces the storage requirements to describe $f$ dramatically. We therefore represent $f \in \ff$ with $f_0, f_1, f_2 \in K[X]$.
 
-\subsection{Elliptic curve groups}
+\subsection{Elliptic Curve Groups}
 
-Recall the distinguished polynomial $e(X,Y) = Y^2 - X^3 - \alpha X - \beta \in \polys$ where $4\alpha^3 + 27\beta^2 \neq 0$, and consider the plane affine curve $\E = v_a(e)$. Note $I(\E/K) = (e)$. This $\E$ is an elliptic curve with affine coordinate ring $K[\E] = \frac{K[X,Y]}{(e)}$ and function field $K(\E) = \text{Frac}(K[\E])$. 
+For the remainder of this manuscript, we assume all elliptic curve groups have prime order strictly greater than $3$.
+
+
+Recall the distinguished polynomial $e(X,Y) = Y^2 - X^3 - \alpha X - \beta \in \polys$ where $4\alpha^3 + 27\beta^2 \neq 0$, and consider the plane projective curve $\E = v_p(e)$. Note $I(\E/K) = (e)$. This $\E$ is an elliptic curve with affine coordinate ring $K[\E] = \frac{K[X,Y]}{(e)}$ and function field $K(\E) = \text{Frac}(K[\E])$. 
 For a natural number $n \in \mathbb{N}$, the surface $\mathcal{E}^n$ is a variety with coordinate ring $K\left[\E^n\right] = \productpolys/I(\E^n/K)$, where $I(\E^n/K)$ is the ideal generated by the set $\left\{e(X_i, Y_i) \mid i \in [n]\right\}$, and function field $K(\E^n) = \text{Frac}(\productpolys/I(\E^n/K))$.
 
-In the following, we take B\'{e}zout's theorem for granted (for more details, see Theorem I.7.8 in \cite{Hartshorne}).
+We additionally take B\'{e}zout's theorem for granted (see Theorem I.7.8 in \cite{Hartshorne}).
 \begin{theorem}[{B}{\'{e}}zout's {T}heorem]
 Let $\F_1$, $\F_2$ be distinct curves in $\P^2(\overline{K})$, having 
-degrees $n_1, n_2$, respectively. Let $\F_1 \cap \F_2 = \left\{P_1, \ldots, P_s\right\}$, and say, for each $1 \leq i \leq s$, that point $P_i$ has multiplicity $m_i$. Then $\sum_{i=1}^{s} m_i = n_1n_2$. 
+degrees $n_1, n_2$, respectively. Let $\F_1 \cap \F_2 = \left\{P_1, \dots, P_s\right\}$, and say, for each $1 \leq i \leq s$, that point $P_i$ has multiplicity $m_i$. Then $\sum_{i=1}^{s} m_i = n_1n_2$. 
 \end{theorem}
 
-The projective variety corresponding to $\E$ is $\G(\E) = v_p(e)$, where $e^*$ is the homogenization of $e$ defined earlier. This $\G(\E)$ admits an abelian group operation $+$ following the elliptic curve group law, which determines decompositions of the group identity in $\G(\E)$ as follows. First, the point at infinity $O=(0\!:\!1\!:\!0)$ is distinguished as the group identity. Next, collinear points define decompositions of $O$. Bezout's theorem implies every line intersects $v_p(\E)$ at $3$ points, counting multiplicities. Hence, every set of collinear points is a triple $(P, Q, R) \in \G^3$ such that $P + Q + R = O$. We have three cases: $P$ has multiplicity $3$, $2$, or $1$.
+The projective variety corresponding to $\E$ is $\G(\E) = v_p(e)$. Then $e^*$ is the homogenization of $e$ defined earlier. This $\G(\E)$ admits an abelian group operation $+$ following the elliptic curve group law, which determines decompositions of the group identity in $\G(\E)$ as follows. First, the point at infinity $O=(0\!:\!1\!:\!0)$ is distinguished as the group identity. Next, collinear points define decompositions of $O$. Bezout's theorem implies every line intersects $v_p(\E)$ at $3$ points, counting multiplicities. Hence, every set of collinear points is a triple $(P, Q, R) \in \G^3$ such that $P + Q + R = O$. We have three cases: $P$ has multiplicity $3$, $2$, or $1$.
 \begin{itemize}
-\item If $P = Q = R$, then $3P = O$, i.e.\ $P$ has multiplicity $3$. This is a contradiction for a non-singular elliptic curve $\E$.
-\item If $P = Q$, then $P + P + R = 2P + R = O$, so $2P = -R$. In this case, we sum points with themselves. However, this implies that the line $\ell$ interpolating $P$ and $R$ intersects $\E$ at $P$ with multiplicity $2$. However, $\E$ is non-singular, so it must be that $\ell$ is \textit{tangent} to $\E$ at $P$.
+\item If $P = Q = R$, then $3P = O$, i.e.\ $P$ has multiplicity $3$. This is contraindicated for a non-singular elliptic curve $\E$ of prime order $p > 3$.
+
+\item If $P = Q$, then $P + P + R = 2P + R = O$, so $2P = -R$. In this case, we sum points with themselves, however this implies that the line $\ell$ interpolating $P$ and $R$ intersects $\E$ at $P$ with multiplicity $2$. Since $\E$ is non-singular, it must be that $\ell$ is \textit{tangent} to $\E$ at $P$.
+
 \item If $P$, $Q$, and $R$ are all distinct, we have two sub-cases: one of these points is an inverse of another, or not.
 \begin{itemize}
-\item If $P = -Q$, then $P + Q + R = R = O$, so $R = O$. In this case, the line interpolating $P$, $Q$, and $R$ includes the point at infinity $O$. The lines passing through $O$ and intersecting $\E$ at a non-identity point are precisely the \textit{vertical lines}. Similarly for the case $P = -R$. 
+\item If $P = -Q$, then $P + Q + R = O$ implies that $R = O$. In this case, the line interpolating $P$, $Q$, and $R$ includes the point at infinity $O$. The lines passing through $O$ and intersecting $\E$ at a non-identity point are precisely the \textit{vertical lines}. Similarly for the case $P = -R$. 
 \item All other cases are when $P$, $Q$, and $R$ are distinct, not inverses of each other, and correspond to lines which are neither vertical nor tangent. 
 \end{itemize}
 \end{itemize}
@@ -401,63 +438,75 @@ For this reason, we often conflate non-identity points like $P$, $Q$, $R \in v_p
 % In the final case, the line $\ell$ intersects $\E$ at three distinct points $P$, $Q$, and $R$, necessarily with multiplicity $1$ each by B\'{e}zout's theorem. That is to say, the line $\ell$ intersects $\E$ transversally at $P$, $Q$, $R$. For these points, $P + Q + R = O$, so $R = -(P+Q)$. Moreover, we can write the coordinates $R=(x_R, y_R)$ with $y_R = \lambda x_R + \mu$ where $(\lambda, \mu) \in \overline{K}^2$ parameterize the line interpolating $P$ and $Q$.
 
 % These rules are sufficient for generating the elliptic curve group $\G(\E)$. 
+
+However, the $y$ coordinates are \textit{almost} uniquely determined by their corresponding $x$ coordinate. Indeed, for each $T \in \left\{P, Q, R\right\}$, only two elements of $K$ satisfy $y_T^2 = x_T^3 + \alpha x_T + \beta$. Distinguishing which $y_T$ corresponds to the point $T$ simply requires a convention for interpreting a parity/sign bit.
+Thus, representing $(x_T,y_T)$ requires only one more bit than representing $x_T$ alone.
+
 In the sequel, we leave $\E$ implicit and denote this $\G$, as we use the same $\E$ throughout. Moreover, the group law as described here is equivalent to a group law defined for rational functions, not merely lines; the proof of this is beyond the scope of this text. See \cite{Silverman} for details.
 
-\subsubsection{Group law and summing points in greater detail}\label{subsec:detail}
+\subsubsection{Group Law and Summing Points}\label{subsec:detail}
 
-We use lines to compute $P + Q$ explicitly as a rational function for a pair $(P, Q) \in (\G \setminus \left\{O\right\})^2$ such that $P \neq \pm Q$; this is useful in our derivations in Appendix \ref{sec:derivation} later. As both are not the identity and $P \neq \pm Q$, the line interpolating $P$ and $Q$ is neither vertical nor tangent to $\E$. By B\'{e}zout's theorem, the line must intersect $\E$ transversally at $P$ and $Q$, as well as at a third distinct point $R$, and these intersection points all have multiplicity $1$. 
-The group law states $P + Q + R = O$. 
+We use lines to compute $P + Q$ explicitly as a rational function for a pair $(P, Q) \in (\G \setminus \left\{O\right\})^2$ such that $P \neq \pm Q$; this is useful in our derivations in Appendix \ref{sec:derivation} later. As both are not the identity and $P \neq \pm Q$, the line interpolating $P$ and $Q$ is not vertical. By B\'{e}zout's theorem, the line must intersect $\E$ at an additional point $R$, which may coincide with $P$ or $Q$. In the case where the three points are distinct, then these intersection points all have a multiplicity of $1$. The group law states $P + Q + R = O$. 
 We compute $(x_R, y_R)$ to represent $R$.
 
 
-Note that, as elements of $\G$, we may write \[P = (x_P\!:y_P\!:z_P) = \left\{(x,y,z) \mid \exists \lambda \in K^\times, (x,y,z) = (\lambda x_P,\lambda y_P,\lambda z_P)\right\}\] and $Q = (x_Q\!:y_Q\!:z_Q)$ similarly. As non-identity elements, $P \neq O = (0\!:\!1\!:\!0)$ so $z_P \neq 0$, and the equivalence class $(x_P\!:y_P\!:z_P)$ contains a representation of the form $(x,y,1)$ (and similarly for $Q$. Thus, we lose no generality by assuming $z_P=z_Q=1$, in which case we can write $P = (x_P\!:y_P\!:1)$ and $Q=(x_Q\!:y_Q\!:1)$. Then $P$ and $Q$ may be dehomogenized to affine points $(x_P, y_P)$, $(x_Q, y_Q) \in \E$; we identify $P = (x_P\!:y_P\!:1)$ with $(x_P, y_P)$, and similarly for $Q$, in our discussion below, keeping in mind that we are actually transferring between points on the projective plane to points on the affine plane via the dehomogenization and homogenization maps.
+Note that, as elements of $\G$, we may write \[P = (x_P\!:\!y_P\!:\!z_P) = \left\{(x,y,z) \mid \forall \lambda \in K^\times, (x,y,z) = (\lambda x_P,\lambda y_P,\lambda z_P)\right\}\] and $Q = (x_Q\!:\!y_Q\!:\!z_Q)$ similarly. As non-identity elements, $P \neq O = (0\!:\!1\!:\!0)$ so $z_P \neq 0$, and the equivalence class $(x_P\!:\!y_P\!:\!z_P)$ contains a representation of the form $(x,y,1)$ (and similarly for $Q$. Thus, we lose no generality by assuming $z_P=z_Q=1$, in which case we can write $P = (x_P\!:\!y_P\!:\!1)$ and $Q=(x_Q\!:\!y_Q\!:\!1)$. Then $P$ and $Q$ may be dehomogenized to affine points $(x_P, y_P)$, $(x_Q, y_Q) \in \E$; we identify $P = (x_P\!:\!y_P\!:\!1)$ with $(x_P, y_P)$, and similarly for $Q$, in our discussion below, keeping in mind that we are actually transferring between points on the projective plane to points on the affine plane via the dehomogenization and homogenization maps.
 
 Define $\lambda = \frac{y_P - y_Q}{x_P - x_Q}$ and $\mu = y_P - \lambda x_P$ as functions of $P$ and $Q$.
 These $\lambda, \mu$ parameterize the interpolating line $\ell(X,Y) = Y - \lambda X - \mu \in K[X,Y]$, and therefore $y_T = \lambda x_T + \mu$ for each $T \in \left\{P, Q, R\right\}$.  Also, since $e(x_T, y_T) = 0$, we have $(\lambda x_T + \mu)^2 = x_T^3 + \alpha x_T + \beta$. Thus, the points $P, Q, R$ have $x$ coordinates which are distinct roots of the third degree polynomial $X^3 - \lambda^2 X^2 + (\alpha - 2\lambda \mu)X + (\beta - \mu^2)$ in $X$.
 All the roots are accounted for, so the polynomial splits into linear factors. 
-\begin{align}
+\begin{align*}
 (X-x_P)(X-x_Q)(X-x_R) &= X^3 - \lambda^2 X^2 + (\alpha - 2\lambda \mu)X + (\beta - \mu^2) 
 % X^3 - (x_P + x_Q + x_R)X^2 + (x_Px_Q + x_Px_R + x_Qx_R)X - x_Px_Qx_R
-\end{align}
-The linear independence of $\left\{1,X,X^2,X^3\right\}$ implies we may match coefficients, so $-\lambda^2 = -x_P - x_Q - x_R$, where $x_P$ and $x_Q$ are already given. Thus we have the following, where we write $x_R$ and $y_R$ as rational functions in the coordinates of $P$ and $Q$:
-\begin{align}
+\end{align*}
+The linear independence of $\left\{1,X,X^2,X^3\right\}$ implies we may match coefficients, so $-\lambda^2 = -x_P - x_Q - x_R$, where $x_P$ and $x_Q$ are already given. 
+\begin{align*}
+\begin{cases}
 x_R &= \lambda^2 - x_P - x_Q \\ 
 y_R &= \lambda x_R + \mu
-\end{align}
-Recalling $\lambda$ and $\mu$ defined above are rational functions, it is clear that these are both rational in $(x_P, x_Q)$, as promised. Thus, the group law demands the following system of equations are satisfied.
+\end{cases}
+\end{align*}
+Recalling $\lambda$ and $\mu$ defined above are rational functions, it is clear that these are both rational in $(x_P, s_P, x_Q, s_Q)$, as promised. 
+% Moreover, if $P, Q, R$ are distinct, non-identity, and collinear, say on line $Y - \lambda X - \mu$, then the coordinates all satisfy the following:
+% \begin{align*}
+% X^3 - (\lambda X + \mu)^2 + \alpha X + \beta =& (X-x_P)(X-x_Q)(X-x_R)\\
+% X^3 - \lambda^2 + ... =& X^3 - (x_P + x_Q + x_R)X^2 + ...
+% \end{align*} where the ellipses denote lower degree terms. 
+Moreover, the group law and the elliptic curve equation demand the following constraints are satisfied.
 \begin{align}
 \begin{cases} 
 \lambda =& \frac{y_Q-y_P}{x_Q-x_P} \\
 \mu =& y_P - \lambda x_P \\
 y_P =& \lambda x_P + \mu\\
 y_Q =& \lambda x_Q + \mu\\
-y_R =& \lambda x_R + \mu\\
 y_P^2 =& x_P^3 + \alpha x_P + \beta \\
-y_Q^2 =& x_Q^3 + \alpha x_Q + \beta \\
-y_R^2 =& x_R^3 + \alpha x_R + \beta \label{thesystem}
+y_Q^2 =& x_Q^3 + \alpha x_Q + \beta
+\label{thesystem}
 \end{cases}
 \end{align}
+% Note that if $x_P, y_P, x_Q, y_Q$ are variables, then these are al rational functions.
 
-Note that if $x_P, y_P, x_Q, y_Q$ are variables, then these are all rational functions.
+We emphasize that, in our notation, lowercase terms like $(x_T, y_T)$ denote the coordinate pairs of a point denoted with an uppercase term $T$, whereas uppercase terms like $(X_T, Y_T)$ refer to variable pairs of transcendental elements, which we handle as coordinate pairs of unspecified points.
 
 
-\subsection{Divisors over \protect{$\E$}}
+\subsection{Divisors over Elliptic Curves}
 
-For each $T = (x\!:\!y\!:\!z) \in \G$, let $\left[T\right]$ be a formal symbol corresponding to $T$. A \textit{divisor} is a finite sum of these formal symbols. These sums can be summed, so divisors generate an additive group $\text{Div}_K(\E)$. We use functions $\nu: \G \to \Z$ with finite supports to represent a divisor $[\nu] = \sum_{T \in \G} \nu(T) \left[T\right]$. The \textit{degree} of $\left[\nu\right]$ is $\text{deg}(\left[\nu\right])=\sum_{T \in \G} \nu(T)$. 
+For each $T = (x\!:\!y\!:\!z) \in \G$, let $\left[T\right]$ be a formal symbol corresponding to $T$. A \textit{divisor} is a finite sum of these formal symbols. These sums can be summed, so divisors generate an additive group which we call $\text{Div}_K(\E)$. We use functions $\nu: \G \to \Z$ with finite supports to represent a divisor $[\nu] = \sum_{T \in \G} \nu(T) \left[T\right]$. The \textit{degree} of $\left[\nu\right]$ is $\text{deg}(\left[\nu\right])=\sum_{T \in \G} \nu(T)$. 
 Let $\text{Div}_{K}^0(\E)$ denote the set of degree-zero divisors. Note $\text{Div}_{K}^0(\E) \subseteq \text{Div}_K(\E)$ and is closed under addition, i.e.\ is a subgroup.
 
 Given any $f \in K(\E)^\times$, we can define a map $\E \to \Z$  by mapping $T \mapsto \text{ord}_T(f)$, and this has with finite support as the numerator and denominator of $f$ both have finite degree (and hence a $f$ has a finite number of roots and poles, even counting multiplicity). Denote $\text{div}(f) = \sum_{T \in \E} \text{ord}_T(f)[T]$.  Define $\text{Prin}(\E) = \left\{\text{div}(f) \mid f \in K(\E)\right\}$. Note we have the following chain of subgroups: $\text{Prin}(\E) \subseteq \text{Div}_K^0(\E) \subseteq \text{Div}_K(\E)$. In the sequel, define the following relation.
-\begin{align}
-\R_{\text{div}} =& \left\{(f, [\nu]) \mid f \in K(\E), [\nu] \in \text{Div}_K^0(\E),  \text{ and } \text{div}(f) = [\nu]\right\} 
-\end{align}
+\begin{align*}
+\R_{\text{div}} =& \left\{(f, [\nu]) \mid f \in K(\E)^\times, \ [\nu] \in \text{Div}_K^0(\E), \text{ and } \text{div}(f) = [\nu]\right\} 
+\end{align*}
 Later, we are particularly interested in the following sub-relation.
 \begin{align}
-\R_{\text{div}}^\prime =& \left\{(f, [\nu]) \mid f \in K(\E), [\nu] \in \text{Div}_K^0(\E),  \left|\text{supp}(\nu)\right| \geq 3, \text{ and } \text{div}(f) = [\nu]\right\} \label{theRelation}
+\R^\prime =& \left\{(f, [\nu]) \mid f \in K(\E)^\times, \ [\nu] \in \text{Div}_K^0(\E), \ \left|\text{supp}(\nu)\right| \geq 3, \text{div}(f) = [\nu],  f \neq g^p\quad\forall g \in K(\E)^\times\right\} \label{theRelation}
 \end{align}
 
+% Later we find it convenient to restrict this relation to pairs $(f, [\nu])$ such that $f$ is not a $p^{th}$ power. 
 We take the following for granted.
 \begin{theorem}
-Let $f \in K(\E)$, $v_a(f) \setminus \left\{O\right\} = \left\{P_1, \ldots, P_n\right\}$, and $v_a(f^{-1}) \setminus \left\{O\right\} = \left\{Q_1, \ldots, Q_s\right\}$ with $n + s \geq 1$. If each $P_i$ has multiplicity $m_i  \in \N$ and each $Q_j$ has multiplicity $t_j \in \N$, and $\sum_i m_i - \sum_j t_j \neq 0$, then:
+Let $f \in K(\E)$ be nonzero, $v_a(f) \setminus \left\{O\right\} = \left\{P_1, \ldots, P_n\right\}$, and $v_a(f^{-1}) \setminus \left\{O\right\} = \left\{Q_1, \ldots, Q_s\right\}$ with $n + s \geq 1$. If each $P_i$ has multiplicity $m_i  \in \N$ and each $Q_j$ has multiplicity $t_j \in \N$, and $\sum_i m_i - \sum_j t_j \neq 0$, then:
 \begin{enumerate}[(a)]
 \item $\sum_i m_i - \sum_j t_j > 0$ implies $f$ has a pole at $O$ with multiplicity $\sum_i m_i - \sum_j t_j$, 
 \item $\sum_i m_i - \sum_j t_j < 0$ implies $f$ has a root at $O$ with multiplicity $\sum_j t_j - \sum_i m_i$, and
@@ -474,21 +523,25 @@ Note that if $f_1$ and $f_2$ do not have disjoint roots and poles, then the comm
 
 
 
-\subsection{Weil's reciprocity}
+\subsection{Weil Reciprocity}
 
 Every $f \in K(\E)$ induces a homomorphism. Indeed, let $[\eta] = \sum_{T \in \G} \eta(T)[T]$ be any divisor such that the support of $\eta$ is disjoint from the roots and poles of $f$. Then let $\widehat{f}([\eta]) = \prod_{T\in \G} f^*(T)^{\eta(T)}$; this is well-defined because the points of $[\eta]$ are disjoint from the roots and poles of $f$.
 
 \begin{theorem}
-For each $f \in K(\E)$, if $[\eta_1]$ $[\eta_2]$ have disjoint supports also disjoint from from the roots and poles of $f$, then $\widehat{f}([\eta_1+\eta_2]) = \prod_{T \in \G} f^*(T)^{\eta_1(T)+\eta_2(T)} = \widehat{f}([\eta_1])\widehat{f}([\eta_2])$.
+For each $f \in K(\E)$, if $[\eta_1]$ and $[\eta_2]$ have supports that are disjoint from the roots and poles of $f$, then $\widehat{f}([\eta_1+\eta_2]) = \prod_{T \in \G} f^*(T)^{\eta_1(T)+\eta_2(T)} = \widehat{f}([\eta_1])\widehat{f}([\eta_2])$.
 \label{thm:inducedmaphom}
 \end{theorem}
 
 
-\begin{theorem}[Weil's Reciprocity Law]
-Let $f, g \in K(\E)$, with $\text{div}(f) = \sum\limits_T \nu(T) [T]$ and $\text{div}(g) = \sum_T \eta(T) [T]$. Then \[\widehat{f}(\text{div}(g)) = \prod\limits_{T \in \G} f^*(T)^{\eta(T)} = \prod\limits_{S \in \G} g^*(S)^{\nu(S)} = \widehat{g}(\text{div}(f)).\] 
+For the remainder of this document, we assume that $[\eta_1]$ and $[\eta_2]$ have mutually disjoint supports.
+
+
+\begin{theorem}[Weil Reciprocity Law]
+Let $f, g \in K(\E)^\times$ with disjoint supports that also exclude $O$, where $\text{div}(f) = \sum\limits_T \nu(T) [T]$ and $\text{div}(g) = \sum_T \eta(T) [T]$. Then \[\widehat{f}(\text{div}(g)) = \prod\limits_{T \in \G} f^*(T)^{\eta(T)} = \prod\limits_{S \in \G} g^*(S)^{\nu(S)} = \widehat{g}(\text{div}(f)).\] 
 \end{theorem}
 
 In particular, if $g$ has a degree $1$ polynomial representing its numerator $aX + bY + c + (e)$ and $1 + (e)$ as the denominator, then $\widehat{g}([\nu]) = \prod_T (ax_T + by_T + c)^{\nu(T)}$.
+For the remainder of this document, when we refer to $f, g \in K(\E)^\times$, we will assume that they have disjoint supports which  exclude $O$, the point at infinity.
 
 
 
@@ -504,9 +557,11 @@ All derivations are linear combinations of these derivations $\dX$, $\dY$, and $
 \end{itemize}
 For $F \subseteq \overline{K}(X,Y)$, the  derivations satisfying $d(F) \subseteq F$ are precisely the derivations with corresponding $(a, b) \in F^2$.
 
-Similarly, $\overline{K}(X,Y,Z)$ has derivations of the form $d=a\dX + b\dY + c\dZ$ for some $a, b, c \in \overline{K}(X,Y,Z)$, and if all $a, b, c$ are in an intermediate field $K \subseteq F \subseteq \overline{K}(X,Y,Z)$, then $d$ is a derivation on $F$.
+Similarly, $\overline{K}(X,Y,Z)$ has derivations of the form $d=a\dX + b\dY + c\dZ$ for some $a, b, c \in \overline{K}(X,Y,Z)$, and if all $a, b, c$ are in an intermediate field $K \subseteq F \subseteq \overline{K}(X,Y,Z)$, then $d$ is a derivation on $F$. 
 
-Given any derivation $d:L \to L$ over $K$, there is a natural map $\delta:L \to L$ mapping $f \mapsto \frac{df}{f}$. Note that given any $f, g \in L$, we have that 
+Later, derivations are used with elements of the function field $K(E)$, where the variables $X$ and $Y$ are not independent (they satisfy a polynomial relation, namely the defining equation of the curve. \cite{bassapersonal}), but those derivations are inherited from the usual ones on $\overline{K}(X,Y)$.
+
+Given any derivation $d:L^\times \to L$ over $K$, there is a natural map $\delta:L^\times \to L$ mapping $f \mapsto \frac{df}{f}$. Note that given any $f, g \in L$, we have that 
 $$ \delta(fg) = \frac{d(fg)}{fg} = \frac{d(f)g + fd(g)}{fg} = \frac{d(f)}{f} + \frac{d(g)}{g} = \delta(f) + \delta(g).$$
 In particular, $\delta$ is a group homomorphism from the multiplicative subgroup of $L$ to the additive group of $L$.
 
@@ -519,38 +574,41 @@ We take the following for granted.
 Let $0 \neq f \in \overline{K}[Z_1, Z_2, \ldots, Z_n]$ with $\text{deg}(f) = d$, and let $S$ be a finite subset of $\overline{K}$. If $s_1, s_2, \ldots, s_n$ are sampled independently and uniformly from $S$, then the probability that $f(s_1, \ldots, s_n)=0$ is at most $\frac{d}{\left|S\right|}$.
 \end{lemm}
 
+It is not strictly necessary for $S$ to be a subset of an algebraically closed field, but this definition of Schwartz-Zippel is sensible for our purposes.
+
 
 
 \section{Method}
 
-Suppose that a prover and verifier wish to implement a proving scheme in an elliptic curve group setting. In most cases, verification requires satisfying one or more linear constraints coming from the group law of $\G$. That is to say, a proof includes some non-identity group elements $P_1, \ldots, P_n \in \G \setminus \left\{O\right\}$ and integer weights $m_1, \ldots, m_n \in \Z$, then the verification procedure requires checking the $\sum_{i=1}^{n} m_i P_i = O$.
+Suppose that a prover and verifier wish to implement a proving scheme in an elliptic curve group setting. In most cases, verification requires satisfying one or more linear constraints coming from the group law of $\G$. That is to say, a proof includes some non-identity group elements $P_1, \ldots, P_n \in \G \setminus \left\{O\right\}$ and integer weights $m_1, \ldots, m_n \in \Z$, then the verification procedure requires checking that $\sum_{i=1}^{n} m_i P_i = O$.
 
 The prover and verifier recall that every principal divisor $\sum_{i=1}^{n} m_i [P_i] - (\sum_{i=1}^{n} m_i)[O]$ corresponds to a decomposition of $O$, so they can merely check whether some divisor  is principal.
-The map \textit{div} is a surjective group homomorphism. Therefore, there exists an element $f \in K(\E)$ such that $\text{div}(f) = \sum_i m_i [P_i] - \left(\sum_i m_i\right)[O]$, which can be used as a witness of principality.
+The map \textit{div} is a surjective group homomorphism. Therefore, there exists an element $f \in K(\E)^\times$ such that $\text{div}(f) = \sum_i m_i [P_i] - \left(\sum_i m_i\right)[O]$, which can be used as a witness of principality.
 
 % In particular, every $P_i$ with $m_i > 0$ is a root of $f$ with multiplicity $m_i$, and every $P_i$ with $m_i < 0$ is a pole of $f$ with multiplicity $-m_i = \left|m_i\right|$. 
 
-The prover and verifier also recall Weil's reciprocity provides $\widehat{f}(\text{div}(g)) = \widehat{g}(\text{div}(f))$ for every pair $f, g \in K(\E) \subseteq K(\E)$. For a fixed $f$, Weil's reciprocity implies an equality of rational functions in the coefficients of $g$ and the coordinates of the points of $\text{div}(g)$; clearing denominators, we obtain a polynomial expression. Evaluating this polynomial at a given $(g, \text{div}(g))$ always yields equality. 
+The prover and verifier also recall Weil reciprocity provides $\widehat{f}(\text{div}(g)) = \widehat{g}(\text{div}(f))$ for every pair $f, g \in K(\E)^\times$ without $O$ in their supports. For a fixed $f$, Weil reciprocity implies an equality of rational functions in the coefficients of $g$ and the coordinates of the points of $\text{div}(g)$; clearing denominators, we obtain a polynomial expression. Evaluating this polynomial at a given $(g, \text{div}(g))$ always yields equality. 
 
-Thus, if $f \in K(\E)$ and some random $(g, \text{div}(g))$ is a root of the polynomial obtained by rationalizing $\widehat{f}(\text{div}(g)) - \widehat{g}(\text{div}(f))$, then the Schwartz-Zippel Lemma implies that the polynomial is the zero polynomial exactly, except with a probability inversely proportional to the cardinality of the set from which we sample $g$.
+Thus, if $f \in K(\E)$ and some random $(g, \text{div}(g))$ is a root of the polynomial obtained by rationalizing $\widehat{f}(\text{div}(g)) - \widehat{g}(\text{div}(f))$, then the Schwartz-Zippel Lemma implies that the polynomial is the zero polynomial exactly, except with a probability inversely proportional to the cardinality of the set from which we sample $g$. 
+We show that checking whether $\widehat{f}(\text{div}(g)) = \widehat{g}([\nu])$ for a random linear $g$ is sufficient to determine if $\text{div}(f) = [\nu]$, except perhaps with a probability given by the Schwartz-Zippel Lemma. Thus, the prover and verifier can conclude that $\sum_{T \in \G} \nu(T) T = O$.
 
-We show that checking whether $\widehat{f}(\text{div}(g)) = \widehat{g}([\nu])$ for a random linear $g$ is sufficient to determine if $\text{div}(f) = [\nu]$, except perhaps with a probability given by the Schwartz-Zippel Lemma. Thus, the prover and verifier can conclude that $\sum_{T \in \G} \nu(T) T = O$. 
+Since the coefficients of $g$ are computed as rational functions in Appendix \ref{BigLambda} and Equation \ref{bigM}, hence the application of Schwartz-Zippel is ostensibly justifiable. 
+A potential issue was brought to us in private communication \cite{bassapersonal} regarding sampling the coefficients of $g$ randomly before computing its roots (as opposed to sampling the roots randomly outright). 
+% In the case of lines, these two cases are evidently equivalent, because of the one-to-one relationship between coefficients and roots of $ax+b$. 
+% For the more general case, one can argue that Vieta's formula shows that a dependency between the coefficients implies a dependency between the roots, and vice versa.
+For the general case, we present Sage code \footnote{\url{https://gist.github.com/FreemanSlaughter/b03c69878c39eb00b8ed273f983f9732}} (see  \cite{freemanslaughter_gist}) giving statistical evidence of that the two cases result in the same distribution of roots, enabling our application of Schwartz-Zippel.
 
-To map expensive multiplication operations to cheaper addition, we exploit logarithmic derivatives, reducing computational costs.
 
 
-\subsection{Problems with previous approaches}
-The system of $8$ equations with $6$ unknowns in Equation (\ref{thesystem}) influences many computations with derivations in the sequel, in turn impacting the application of the chain rule. %Indeed, students of the standard calculus sequence may be familiar with using the \textit{Jacobian} of similar systems of equations to determine if a system is smooth at a point. This yields chain-rule equations when differentiating function field elements at $P$, $Q$, and $R$. 
+\subsection{Previous Approaches}
+The system of $9$ equations with $6$ unknowns in Equation \ref{thesystem} influences many computations with derivations in the sequel, in turn impacting the application of the chain rule. %Indeed, students of the standard calculus sequence may be familiar with using the \textit{Jacobian} of similar systems of equations to determine if a system is smooth at a point. This yields chain-rule equations when differentiating function field elements at $P$, $Q$, and $R$. 
+In particular, if $\lambda$ and $\mu$ are handled as independent variables, four more variables must be determined in order to solve the system (among $x_P, x_Q, x_R, y_P, y_Q, y_R$). This forces at least once choice of $x_T$ for $T \in \left\{P,Q,R\right\}$ to be handled as a dependent variable, totally determined by the other variables. However, this $x_T$ is (in general) irrational in $\lambda$ and $\mu$.
 
-This is precisely the complication left unaddressed by Eagen in \cite{Eagen}, and sketched by Bassa in \cite{SoundnessForDLP}.  We think the work in \cite{Eagen} intended to characterize solutions to this system as dependent upon $\lambda$ and $\mu$, the only free variables, exactly determining solutions to this system. Had this been correct, the resulting verification equations would have reduced Eagen's claims. This would simplify verification by allowing the chain rule to be computed with respect to the line $Y - \lambda X - \mu = 0$.
+The work in \cite{Eagen} intended to characterize proofs of security handling $\lambda$ and $\mu$ as the free variables to determine solutions to this system. %This would simplify verification by allowing the chain rule to be computed with respect to the line $Y - \lambda X - \mu = 0$.
+Solutions for $x_R$ in terms of $\lambda$ and $\mu$ are obtainable using Cardano's formula, but the solutions are not guaranteed to be rational functions in $\lambda$ and $\mu$ (and therefore neither. In fact, generally these solutions are not rational, which complicates the application of derivatives beyond the computations in \cite{Eagen}.
 
-While solutions for this system of equations in terms of $\lambda$ and $\mu$ are easily obtainable using Cardano's formula, the solutions are not guaranteed to be rational functions in $\lambda$ and $\mu$. In fact, generally these solutions are not rational, which complicates the application of derivatives beyond the computations in \cite{Eagen}.
+On the other hand, by picking the $x$-coordinates of $P$ and $Q$, $x_P$ and $x_Q$, and sign bits $s_P$ and $s_Q$, we can solve for the $y$-coordinates $y_P$ and $y_Q$. With $P=(x_P,y_P)$ and $Q=(x_Q,y_Q)$ in hand, we solve this system for solutions which are rational in $(P,Q)$. 
 
-On the other hand, by picking $P$ and $Q$, we obtain $x_P, y_P, x_Q, y_Q$, instead over-determining the solution to this system; as Bassa noted, $P = (x_P, y_P)$ and $Q = (x_Q, y_Q)$ form a pair on the surface $(P, Q) \in \E^2$. With this, solutions are rational in $x_P, y_P, x_Q, y_Q$.
-However, the $y$ coordinates are \textit{almost} uniquely determined by their corresponding $x$ coordinate. Indeed, for each $T \in \left\{P, Q, R\right\}$, only two elements of $K$ satisfy $y_T^2 = x_T^3 + \alpha x_T + \beta$. Distinguishing which $y_T$ corresponds to the point $T$ simply requires a convention for interpreting a parity/sign bit.
-Thus, representing $(x_T,y_T)$ requires only one more bit than representing $x_T$ alone. Thus, we really have five unknown field elements ($x_P, x_Q, x_R, \lambda, \mu$) and $3$ sign bits (one each to uniquely determine $y_P, y_Q, y_R$). Above, we pick $P$ and $Q$, i.e.\ two field elements and two bits, and this is sufficient to uniquely determine $R$, $\lambda$, and $\mu$. 
-By over-determining our solutions, we risk that with small probability a solution may not exist, however we only slightly over-determine our solutions by $2$ bits.
-For this price, we then obtain rational solutions. 
 
 
 % This system of equations is important in applying derivations to function field elements, and is not to be overlooked.
@@ -558,20 +616,19 @@ For this price, we then obtain rational solutions.
 
 
 
-\subsection{Method description}
+\subsection{Method Description}
 
-
-Let $K$ be a finite field with characteristic $p$, and let $\E$ be a non-singular elliptic curve over $K[X,Y]$ such that $\left|\mathbb{G}(\E)\right| = q > 3$ for some prime $q$. Let $H:\left\{0,1\right\}^* \to (\G\setminus\left\{O\right\})^2$ be a cryptographic hash function. Define the tuple of algorithms $\Pi = (\texttt{Setup}, \texttt{Prove}, \texttt{Verify})$ as follows. 
+Let $K$ be a finite field with characteristic $p$, and let $\E$ be a non-singular elliptic curve over $K$ such that $\left|\mathbb{G}(\E)\right| = q > 3$ for some prime $q$. Let $H:\left\{0,1\right\}^* \to K^2 \times \zo \times \zo$ be a cryptographic hash function. Define the tuple of algorithms $\Pi = (\texttt{Setup}, \texttt{Prove}, \texttt{Verify})$ as follows. 
 \begin{itemize}
 \item $\texttt{Setup}(\lambda) \to \texttt{params}$. Input security parameter and output setup parameters $\texttt{params}$.
 \item $\texttt{Prove}(\texttt{params}, [\nu]) \to \pi$. The prover does the following:
 \begin{enumerate}
 \item \label{prove1} Compute \[\texttt{out} \leftarrow \texttt{Wit}(\texttt{params}, \underbrace{P_0, \ldots, P_0}_{\nu(P_0)\text{ times}}, \underbrace{P_1, \ldots, P_1}_{\nu(P_1)\text{ times}}, \cdots, \underbrace{P_{n-1}, \ldots, P_{n-1}}_{\nu(P_{n-1})\text{ times}})\] with Algorithm \ref{alg:makewitness}; if $\texttt{out} = \bot$, output $\bot$ and terminate.
-\item \label{prove2} Compute $(P, Q) \leftarrow H(\texttt{params}, f, [\nu])$. If $P = \pm Q$, output $\bot$ and terminate. \label{firststep}
+\item \label{prove2} Compute $(x_P, x_Q, s_P, s_Q) \leftarrow H(\texttt{params}, f, [\nu])$. Compute the values $\pm y_P$, $\pm y_Q$ as solutions to the elliptic curve equation $y_T^2 = x_T^3 + \alpha X_T + \beta$ for $T=P,Q$, and use $s_P$ and $s_Q$ as sign bits to determine $y_P$ and $y_Q$. Set $P = (x_P, y_P)$ and $Q=(x_Q, y_Q)$. If $P = \pm Q$, output $\bot$ and terminate. \label{firststep}
 \item \label{prove3} Compute $R = -(P + Q)$. If $P = \pm R$ or $Q = \pm R$ or $\left\{P, Q, R\right\} \cap \left\{P_i\right\}_{i=1}^{n} \neq \emptyset$, then output $\bot$ and terminate. %any of the follwoing conditions are satisfied, output $\bot$ and terminate. 
 
 \item \label{prove4} Parse the following, if possible; otherwise, output $\bot$ and terminate.
-\begin{align}
+\begin{align*}
 % \item $f \leftarrow \texttt{out}$,
 (f_1(X), f_2(X)) = f &\leftarrow \texttt{out} \\%\text{ for some }f=\frac{f_1(X)+f_2(X)Y}{f_3(X)} \\
 \sum_{i=1}^{n} m_i [P_i] &\leftarrow [\nu] \\
@@ -579,39 +636,41 @@ Let $K$ be a finite field with characteristic $p$, and let $\E$ be a non-singula
 (x_P, y_P) &\leftarrow P \\
 (x_Q, y_Q) &\leftarrow Q \\
 (x_R, y_R) &\leftarrow R
-\end{align}
+\end{align*}
 \item \label{prove5} Compute/set the following: 
-\begin{align}
+\begin{align*}
 \Delta X =& x_Q - x_P\\
 \Delta Y =& y_Q - y_P\\
 \mu =& y_P - \lambda x_P \\
 f_X =& f_1^\prime(X) + Yf_2^\prime(X)\\
 f_Y =& f_2(X)
-\end{align}
+\end{align*}
 
-\item \label{prove6} Compute 
-$\lambda = \frac{\Delta Y}{\Delta X}$ and 
-$y_T^\prime = \frac{3x_T^2+\alpha}{2y_T}$ for each $T \in \left\{P, Q, R\right\}$. If $y_T^\prime = \lambda$  or $f(T) = 0$ for any $T \in \left\{P, Q, R\right\}$, output $\bot$ and terminate.
+\item \label{prove6} Compute $\Gamma_T := 3x_T^2 + \alpha$ for each $T \in \left\{P, Q, R\right\}$. If $\Gamma_T \cdot
+\Delta X  = 2 y_T \Delta Y$  or $f(T) = 0$ for any $T \in \left\{P, Q, R\right\}$, output $\bot$ and terminate.
 
 
 \item \label{prove7} Compute the following:
-\begin{align}
-A_i =& (y_i - \lambda x_i - \mu)^{-1}\text{ for each }1 \leq i \leq n  \\
-B_1 =& \frac{2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)}{2y_Pf(P)(3x_P^2+\alpha - 2\lambda y_P)} \\
-B_2 =& - \frac{2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))}{2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda )\Delta X} \\
-B_3 =& \frac{2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q)}{2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)} \\
-B_4 =& \frac{2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))}{2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X}
-\end{align}
+\begin{align*}
+A_i =& \Delta X \cdot(y_i \Delta X - x_i \Delta Y + y_P \Delta X - x_P \Delta Y)^{-1}\text{ for each }1 \leq i \leq n  \\
+% N_1 =& \non \\
+% N_2 =& \ntw \\
+% N_3 =& \nth \\
+% N_4 =& \nfo \\
+% N_5 =& \nfi \\
+% N_6 =& \nsi \\
+D =& \den
+\end{align*}
 
 
-\item \label{prove8} Output $\pi = (f,  \lambda, y_P^\prime, y_Q^\prime, y_R^\prime, A_1, \ldots, A_n, B_1, B_2, B_3, B_4)$. 
+\item \label{prove8} Compute $D^{-1}$ and output $\pi = (f,  A_1, \ldots, A_n, D^{-1})$. 
 \end{enumerate}
 
 
 \item $\texttt{Verify}(\texttt{params}, [\nu], \pi) \to b \in \zo$.
 \begin{enumerate}
-\item \label{verify1} Parse $(f, \lambda, y_P^\prime, y_Q^\prime, y_R^\prime, A_1, \ldots, A_n, B_1, B_2, B_3, B_4) \leftarrow \pi$ if possible; otherwise, output $0$ and terminate.
-\item \label{verify2}  Execute steps \ref{firststep}-\ref{prove5} from \texttt{Prove}. If any fail, output $0$ and terminate.
+\item \label{verify1} Parse $(f, A_1, \ldots, A_n, D^{-1}) \leftarrow \pi$ if possible; otherwise, output $0$ and terminate.
+\item \label{verify2}  Execute steps \ref{firststep}-\ref{prove6} from \texttt{Prove}. If any of these computations fail, output $0$ and terminate.
 % \item Compute challenge points $(P, Q) \leftarrow H(\texttt{params}, f, [\nu])$. If $P = \pm Q$, output $0$ and terminate.
 % \item Compute $R = -(P + Q)$. If $P = \pm R$ or $Q = \pm R$ or $\left\{P, Q, R\right\} \cap \left\{P_i\right\}_{i=1}^{n} \neq \emptyset$, output $0$ and terminate. %any of the follwoing conditions are satisfied, output $\bot$ and terminate.
 % \item Parse the following, if possible; otherwise, output $\bot$ and terminate.
@@ -625,36 +684,33 @@ B_4 =& \frac{2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y
 % \item $(x_R, y_R) \leftarrow R$.
 % \end{itemize}
 % \item Carry out step \ref{prove5} from \texttt{Prove}.
-\item  \label{verify3} Compute the following.
-\begin{align}
-% \Delta X =& x_Q - x_P \\
-% \Delta Y =& y_Q - y_P \\
-% \lambda =& \frac{\Delta Y}{\Delta X} \\
-% \mu =& y_P - \lambda x_P \\
-% R =& -(P + Q) \\
-b_1 =& 2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P) \\
-c_1 =& 2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)\\
-b_2 =& 2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda ) \Delta X\\
-c_2 =& - 2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))\\
-b_3 =& 2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)\\
-c_3 =& 2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q) \\
-b_4 =& 2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X\\
-c_4 =& 2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))
-\end{align}
+\item  \label{verify3} Compute $D$ as in step \ref{prove7} from \texttt{Prove} and compute the following:
+\begin{align*}
+N_1 =& \non \\
+N_2 =& \ntw \\
+N_3 =& \nth \\
+N_4 =& \nfo \\
+N_5 =& \nfi \\
+N_6 =& \nsi 
+\end{align*}
+If any of these computations fail, output $0$ and terminate.
 
 \item  \label{verify4} If any of the following hold, output $0$ and terminate.
 \begin{itemize}
-\item $\lambda \Delta X \neq \Delta Y$,
-\item $2 y_T y_T^\prime \neq 3x_T^2 + \alpha$ for any $T \in \left\{P,Q,R\right\}$,
-\item $(y_i - \lambda x_i - \mu)A_i \neq 1$ for some $1 \leq i \leq n$,
-\item $b_iB_i \neq c_i$ for some $1 \leq i \leq 4$, or
-\item $B_1 + B_2 + B_3 + B_4 \neq \sum_i m_i A_i$.
+% \item $\lambda \Delta X \neq \Delta Y$,
+\item $\VerEquA$,
+\item $\VerEquB$, 
+\item $\VerEquC$,
+% \item $b_iB_i \neq c_i$ for some $1 \leq i \leq 4$, or
+\item $\VerEquD$. 
+% \free{$\sum\limits_{j=1}^4 b_j c_{j+1} c_{j+2} c_{j+3} \neq \prod\limits_{j=1}^4 c_{j} \cdot \sum\limits_i m_i A_i$, where in the $j$ sum we take indices modulo $4$ as a cyclic sum}
 \end{itemize}
 \item  \label{verify5} Otherwise, output $1$ and terminate.
 
 \end{enumerate}
 
 \end{itemize}
+
 
 
 \begin{table}[H]
@@ -869,117 +925,147 @@ c_4 =& 2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\la
 % \end{table}
 
 % The runtime of $\texttt{Wit}$ is $O(n^2)$.
-We note that as $\left|\G\right| > 3$ and prime order, $\G$ contains no elements of order $2$, so it is not necessary to check whether any points have $y_T = 0$ before performing divisions. Variations of this scheme can be deployed with groups with non-prime order presuming that all computations are checked to occur within a prime-order subgroup. 
+In the sequel, we omit $\texttt{params}$ from the inputs of functions to be concise. We note that as $\left|\G\right| > 3$ and prime order, $\G$ contains no elements of order $2$ or $3$, so it is not necessary to check whether any points have $y_T = 0$ before performing divisions. Variations of this scheme can be deployed with groups with non-prime order presuming that all computations are checked to occur within a prime-order subgroup. 
 
 \subsubsection{Usage}
-Augmenting the output of a ``scalar multiplication'' algorithm computing $P=aG$ from $a$ and $G$ with a proof from this scheme creates a verifiable scalar multiplication scheme. Indeed, to prove that a scalar multiplication has been performed correctly, say $P = aG$ for some $G \in \G \setminus\left\{O\right\}$ and some $1 \leq a < \text{ord}(\G)$, the prover runs $\texttt{Wit}$ with $[\nu] = a[G] + [-P]$, $[aG] + [-P]$, or $\sum_i s_i [2^i G] + [-P]$ where $\vec{s} \text{ mod }p$ is a non-unique decomposition of $aG$ into binary powers of $G$.
+Augmenting the output of a ``scalar multiplication'' algorithm computing $P=aG$ from $a$ and $G$ with a proof from this scheme creates a verifiable scalar multiplication scheme. Indeed, to prove that a scalar multiplication has been performed correctly, say $P = aG$ for some $G \in \G \setminus\left\{O\right\}$ and some $1 \leq a < \text{ord}(\G)$, the prover runs $\texttt{Wit}$ with $[\nu] = a[G] + [-P]$. However, $[\nu]$ decomposes non-uniquely this way, so other alternatives include $[aG] + [-P]$ and $\sum_i s_i [2^i G] + [-P]$, where $\vec{s} \ (\text{mod }p)$ is a non-unique decomposition of $aG$ into binary powers of $G$. Different representations of $[\nu]$ lead to different computational costs; in particular, using $[\nu] = a[G] + [-P]$ requires a witness of degree $O(a)$, increasing costs impractically when $a$ is large.
+
+We emphasize that our function $\texttt{line}$ and $\texttt{Wit}$ can be black-boxed and replaced with other alternatives, so we do not list their costs explicitly.
 
 \subsubsection{Efficiency}\label{sec:efficiency}
 
+A proof $\pi \leftarrow \texttt{Prove}([\nu])$ for $[\nu] = \sum_{i=1}^{n} P_i$ consists of one function field element and $n+1$  elements of $K$. 
 
-Note that, in $\texttt{Wit}$, we compute $\frac{n}{2}$ group operations during pre-computation, and then in the first inner loop we compute $\frac{n}{4}$ operations, then $\frac{n}{8}$, then $\frac{n}{16}$, and so on. In particular, $\texttt{Wit}$ takes up to $\sum_i \frac{n}{2^i} \leq n$ group operations. For each of these, up to $3$ queries are made to $\texttt{line}$, $3$ products in $K(\E)$ are computed, and one division in $K(\E)$. Also, in the first inner loop, we compute $\frac{n}{4}$ sums of degrees, then $\frac{n}{8}$, and so on, so we have at most $\frac{n}{2}$ sums of degrees; we interpret these as sums in $K$. 
+
+Note that, in $\texttt{Wit}$, we compute $\frac{n}{2}$ group operations during pre-computation, and then in the first inner loop we compute $\frac{n}{4}$ operations, then $\frac{n}{8}$, then $\frac{n}{16}$, and so on. In particular, $\texttt{Wit}$ takes up to $\sum\limits_{i=1}^\infty \frac{n}{2^i} \leq n$ group operations. For each of these, up to $3$ queries are made to $\texttt{line}$, $3$ products in $K(\E)$ are computed, and one division in $K(\E)$. Also, in the first inner loop, we compute $\frac{n}{4}$ sums of degrees, then $\frac{n}{8}$, and so on, so we have at most $\frac{n}{2}$ sums of degrees; we interpret these as sums in $K$. 
 
 
-We display some operation counts in Table \ref{tab:operation-counts}. 
+% We display some operation counts in Table \ref{tab:operation-counts}. \brando{Table 1 is correct for Prove and Verify - let's strip out the line and wit functions from this because they are black-boxable and not particularly important.}
 
-\begin{table}[h!]
+% \brando{
+% RECOMPUTE THE FOLLOWING EXAMPLE:
+% Divisor-based proofs are impractical when divisor coefficients are too large, just as it is impractical to verify extremely large computations over an elliptic curve group na\"{i}vely. Consider an example where we wish to open a Pedersen commitment, $C = x_1 G_1 + x_2 G_2$. Aside from a single group operation, the most costly computations which a verifier must compute are field multiplications, so we only count those, for the sake of the example. The prover computes $\pi_1 \leftarrow \texttt{Prove}([x_1 G_1] + [x_2 G_2] + [-C])$, $\pi_2 \leftarrow \texttt{Prove}(x_1[G_1] + [-x_1G_1])$, and $\pi_3 \leftarrow \texttt{Prove}(x_2[G_2] + [-x_2G_2])$. For these, we have $n_1 = 3$, $n_2 = x_1 + 1$, and $n_3 = x_2 + 1$, so verifying these three proofs requires the verifier to compute $3$ group operations and $3(n_1 + n_2 + n_3) + 261 = 3(5 + x_1 + x_2)$ field multiplications. At least one of these opening pieces of data $x_1, x_2$ is sampled uniformly from the scalar field $\Z_q$ for $\G$, which typically has a cryptographically large $q$.
+% }
+% \free{What's stopping us from doing $\pi \leftarrow \texttt{Prove}(x_1 [G_1] + x_2 [G_2] + [-C])$ as a single proof, at cost $n = x_1 + x_2 + 1$?}
+
+
+
+% \brando{
+% On the other hand, divisor proofs with bounded decompositions are practical. Consider the verifiable scalar multiplication gadget suggested in \cite{Kayaba}. That approach demonstrates scalar multiplication $P = aG$ by computing $s_0, s_1, \ldots, s_{t-1}$ such that $\sum_i s_i 2^i \equiv a \ (\text{mod }q)$.  These $s_i \in \Z$ may be arbitrarily selected, and we use divisor $\left[\nu\right] = \sum_i s_i[2^i G] + [-P]$. Assuming $q$ is some $256$-bit prime, we have $n=257$ elements in the support of this divisor. Thus, verifiers need to compute one group addition, two derivatives, one hash function, $3n+3=774$ additions in $K$, $3n+87=858$ multiplications in $K$, and no divisions. This compares favorably to, say, the Montgomery ladder in computing $P = aG$, which requires $O(2\log_2(a))$ divisions in $K$, cannot be placed within a circuit, and just recreates all the prover's work.
+% }
+% \brando{
+% As most of the computational cost of verification addition and multiplication in $K$, without any division, proof verification can be done almost entirely within-circuit. Indeed, \cite{Kayaba} demonstrates methods for putting divisor proofs within rank-$1$ constraint systems.
+% }
+
+\renewcommand{\figurename}{Table}
+% \setcounter{figure}{1} 
+\renewcommand\thefigure{1}
+
+% \begin{figure}[h!]
+% \centering
+% \begin{tabular}{|l|c|c|c|c|c|c|c|c|} \hline
+% Algorithm & $K,\frac{d}{dX}$ & $K,+$ & $K,\times$ & $K,\div$ & $\G,+$ & $K(\E), \times$ & $K(\E),\div$ & Ext \\ \hline
+% $\texttt{line}$ & $0$ & $2$ & $3$ & $1$ & $0$ & $0$ & $0$ & - \\ \hline
+% $\texttt{Wit}$ & $0$ & $n/2$ & $0$ & $0$ & $n$ & $3n$  & $n$ &  $3n$ ($\texttt{line}$)\\ \hline
+% $\texttt{Prove}$ & $2$ & $3n+7$ & $10n+6$ & $1$ &  $1$ & $0$  & $0$ & $1$ ($\texttt{Wit}$, $H$)\\ \hline
+% $\texttt{Verify}$ & $2$ & $5n+22$ & $15n+51$ & $0$ & $1$ & $0$ & $0$ & $1$ ($H$) \\ \hline
+% \end{tabular}
+% \caption{Operation Counts for Different Algorithms}
+% \label{tab:operation-counts}
+% \end{figure}
+
+\begin{figure}[h!]
 \centering
-\caption{Operation Counts for Different Algorithms}
-\begin{tabular}{|l|c|c|c|c|c|c|c|c|} \hline
-Algorithm & $K,\frac{d}{dX}$ & $K,+$ & $K,\times$ & $K,\div$ & $\G,+$ & $K(\E), \times$ & $K(\E),\div$ & Ext \\ \hline
-$\texttt{line}$ & $0$ & $2$ & $3$ & $1$ & $0$ & $0$ & $0$ & - \\ \hline
-$\texttt{Wit}$ & $0$ & $n/2$ & $0$ & $0$ & $n$ & $3n$  & $n$ &  $3n$ ($\texttt{line}$)\\ \hline
-$\texttt{Prove}$ & $2$ & $2n+22$ & $n+72$ & $n+6$ &  $1$ & $0$  & $0$ & $1$ ($\texttt{Wit}$, $H$)\\ \hline
-$\texttt{Verify}$ & $2$ & $3n+3$ & $3n+87$ & $0$ & $1$ & $0$ & $0$ & $1$ ($H$) \\ \hline
+\begin{tabular}{|l||c|c|c|c|c|c|c|c|} \hline
+Algorithm & $K, d/dX$ & $K,+$ & $K,\times$ & $K,\div$ & $\G,+$ & $K(\E), \times$ & $K(\E),\div$ & Ext \\ 
+\hline \hline
+% $\texttt{line}$ & $0$ & $2$ & $3$ & $1$ & $0$ & $0$ & $0$ & - \\ \hline
+% $\texttt{Wit}$ & $0$ & $n/2$ & $0$ & $0$ & $n$ & $3n$  & $n$ &  $3n$ ($\texttt{line}$)\\ \hline
+$\texttt{Prove}$ & $2$ & $3n+7$ & $10n+6$ & $1$ &  $1$ & $0$  & $0$ & $1$ ($\texttt{Wit}$, $H$)\\ \hline
+$\texttt{Verify}$ & $2$ & $5n+22$ & $15n+51$ & $0$ & $1$ & $0$ & $0$ & $1$ ($H$) \\ \hline
 \end{tabular}
+\caption{Operation Counts for Different Algorithms}
 \label{tab:operation-counts}
-\end{table}
-
-Divisor proofs are impractical when divisor coefficients are too large. Consider an example where we wish to open a Pedersen commitment, $C = x_1 G_1 + x_2 G_2$. The most costly computations which a verifier must compute are field multiplications, so we only count those, for the sake of the example. The prover computes $\pi_1 \leftarrow \texttt{Prove}([x_1 G_1] + [x_2 G_2] + [-C])$, $\pi_2 \leftarrow \texttt{Prove}(x_1[G_1] + [-x_1G_1])$, and $\pi_3 \leftarrow \texttt{Prove}(x_2[G_2] + [-x_2G_2])$. For these, we have $n_1 = 3$, $n_2 = x_1 + 1$, and $n_3 = x_2 + 1$, so verifying these three proofs requires the verifier to compute $3$ group operations and $3(n_1 + n_2 + n_3) + 261 = 3(5 + x_1 + x_2)$ field multiplications. At least one of these opening pieces of data $x_1, x_2$ is sampled uniformly from the scalar field $\Z/q\Z$ for $\G$, which typically has a cryptographically large $q$.
-
-On the other hand, divisor proofs with bounded decompositions are practical. Consider the verifiable scalar multiplication gadget suggested in \cite{Kayaba}. That approach demonstrates scalar multiplication $P = aG$ by computing $s_0, s_1, \ldots, s_{t-1}$ such that $\sum_i s_i 2^i \equiv a (\text{mod }q)$.  These $s_i \in \Z$ may be arbitrarily selected, and we use divisor $\left[\nu\right] = \sum_i s_i[2^i G] + [-P]$. Assuming $q$ is some $256$-bit prime, we have $n=257$ elements in the support of this divisor. Thus, verifiers need to compute one group addition, two derivatives, one hash function, $3n+3=774$ additions in $K$, $3n+87=858$ multiplications in $K$, and no divisions. This compares favorably to, say, the Montgomery ladder in computing $P = aG$, which requires $O(2\log_2(a))$ divisions in $K$, cannot be placed within a circuit, and just recreates all the prover's work.
-
-As most of the computational cost of verification addition and multiplication in $K$, without any division, proof verification can be done almost entirely within-circuit. Indeed, \cite{Kayaba} demonstrates methods for putting divisor proofs within rank-$1$ constraint systems.
-
-\subsubsection{Implementation risks}
+\end{figure}
 
 
-In the sequel, we omit $\texttt{params}$ from the inputs of functions to be concise.
-In the generic divisors framework we present, the points $P$ and $Q$ may be selected non-interactively by utilizing the (strong) Fiat-Shamir heuristic \cite{FiatShamir}.
+\subsubsection{Implementation Risks}
+
+
+In the generic divisors framework we present, we highlight some possible implementation risks.
+
+The points $P$ and $Q$ may be selected non-interactively by utilizing the (strong) Fiat-Shamir heuristic \cite{FiatShamir}.
 This paradigm is often used to turn an interactive zero-knowledge proof into a non-interactive signature scheme.
-The Fiat-Shamir transform can implemented practically with a cryptographically secure hash function with codomain $(\G\setminus\left\{O\right\})^2$, which can model a PRNG (really, a cryptographically secure pseudo-random \textit{elliptic curve point} generator, but this CSPRECPG may be modeled with a PRNG and a hash-to-point method), but care must be taken to avoid vulnerabilities with the weak Fiat-Shamir transform \cite{NHB,BPW,DMWG}. All public parameters and transcripted communications must be included in the hash input.
-To avoid vulnerabilities like the so-called Frozen Heart attack \cite{Marvinblog, FH3}, the hash digest must have been generated from the commitments, previous randomness, user tags, counters, etc.
+The Fiat-Shamir transform can implemented practically with a cryptographically secure hash function with codomain $(\G\setminus\left\{O\right\})^2$, which can model a PRNG (really, a cryptographically secure pseudo-random \textit{elliptic curve point} generator, but this CSPRECPG may be modeled with a PRNG and a hash-to-point method), but care must be taken to avoid vulnerabilities with the weak Fiat-Shamir transform \cite{NHB,BPW,DMWG}. All public parameters and transcript communications must be included in the hash input.
+To avoid vulnerabilities like the so-called Frozen Heart attack \cite{Marvinblog, FH3} stemming from the weak form of the transform, the hash digest must have been generated from: commitments, witnesses, previous randomness, user tags, counters, etc.
+
+Moreover, if the witness is a $p^{th}$ power, its derivatives evaluate to zero. However, this is not a practical concern, as this condition requires the degree of $f$ to be an integer multiple of $p$, which is generally quite large. 
 
 \subsubsection{Extensions}
-Batch verification of multiple witnesses $f_1, \ldots, f_M$ for principal divisors $[\nu_1], \ldots, [\nu_M]$ may be possible by sampling coefficients $\gamma_1, \ldots, \gamma_M$ and testing the witness $\prod_j f_j^{\gamma_j}$ for the divisor $\sum \gamma_j [\nu_j]$. 
+Batch verification of multiple witnesses $f_1, \ldots, f_M$ for principal divisors $[\nu_1], \ldots, [\nu_M]$ may be possible by sampling coefficients $\gamma_1, \ldots, \gamma_M \in K$ and testing the witness $\prod_j f_j^{\gamma_j}$ for the divisor $\sum \gamma_j [\nu_j]$. 
 %, but that is beyond the scope of this document.
-Furthermore, this can be simplified by asking the verifier to sample a single random value $\gamma$, then demonstrating the proof for $\sum_j \gamma^j [\nu_j]$. 
+Furthermore, this can be simplified by asking the verifier to sample a single random value $\gamma \in K$, then demonstrating the proof for $\sum_j \gamma^j [\nu_j]$. 
 
 However, see Section \ref{sec:efficiency}. Efficiency is impacted by the coefficients/multiplicities of a divisor. This should not be surprising, as scalar multiplication methods are more expensive as the scalar increases in bit length.
 
 
-\subsection{Security properties}\label{sec:SecurityProps}
+\subsection{Security Properties}\label{sec:SecurityProps}
 
 It should be clear that, if $[\nu]$ is a nontrivial decomposition of $O$ into a sum of non-identity points, then $\texttt{MakePairs}$ certainly does not output $\bot$. 
 
 \begin{lemm}
 \label{lem:number_collinear_triples}
-Let $S=\left\{P_1, \ldots, P_n\right\}$ be a fixed subset of $\G \setminus \left\{O\right\}$. Let $\mathcal{C}$ be the set of $3$-sets $\left\{P, Q, R\right\} \in \G^3$ such that $P, Q, R$ are distinct, non-identity, and collinear. Then $\left|\mathcal{C}\right| = (\left|\G\right|-1)(\left|K\right|-2)$ and $\left|\left\{S \cap T = \emptyset \mid T \in \mathcal{C}\right\}\right| \geq \left|\mathcal{C}\right| - n(\left|K\right|-2)$. 
+Let $S=\left\{P_1, \ldots, P_n\right\}$ be a fixed subset of $\G \setminus \left\{O\right\}$ (i.e. the rational points of $\G$). Let $\mathcal{C}$ be the set of $3$-sets $\left\{P, Q, R\right\} \in \G^3$ such that $P, Q, R$ are distinct, non-identity, and collinear. Then $ \left|\mathcal{C}\right| = (\left|\G\right|-1)(\left|K\right|-2)$ and $\left|\left\{T \in \mathcal{C} \mid S \cap T = \emptyset  \right\}\right|  \geq \left|\mathcal{C}\right| - n(\left|K\right|-2)$.
+
 \end{lemm}
 \begin{proof}
-Each line in projective space which intersects $\E^*$ at three distinct non-identity points has a corresponding element in $\mathcal{C}$. Consider the point-slope representation of each such line. For any non-identity point $P = (x_P\!:\!y_P\!:\!1)\in \G \setminus \left\{O\right\}$, every line passing through $P$ can be represented as $Y - \lambda (X-x_P) - y_P$, and each distinct choice of $\lambda \in K$ yields a distinct line.  One of these lines is vertical, and one is tangent to $\E^*$. Thus, there are $\left|K\right|-2$ non-vertical, non-tangent lines passing through any non-identity point $P$ which intersect $\E$ at two other distinct non-identity points. Moreover, there are $\left|\G\right|-1$ choices of non-identity $P$. Thus, we have $\left|\mathcal{C}\right| = (\left|\G\right|-1)\left(\left|K\right|-2\right)$.
+Each line in projective space which intersects $\E$ at three distinct non-identity points has a corresponding element in $\mathcal{C}$. Consider the point-slope representation of each such line. For any non-identity point $P = (x_P\!:\!y_P\!:\!1)\in \G \setminus \left\{O\right\}$, every line passing through $P$ can be represented as $Y - \lambda (X-x_P) - y_P$, and each distinct choice of $\lambda \in K$ yields a distinct non-vertical line. Since we only want to focus on the point-slope pairs that intersect yield three distinct non-identity points, notice that two of the particular slopes should be discarded. The first is the line tangent to $P$ (i.e. $P+P+Q=O$ for some $Q \in \G$). The second is the line tangent to some $R \in \G$ that meets $P$ (i.e. $P+R+R=O$ for some $R \in \G$).
 
-Moreover, for each point $P_i \in S$, there are $\left|K\right|-2$ distinct non-vertical, non-tangent lines passing through $P_i$, so at most $n(\left|K\right|-2)$ elements of $\mathcal{C}$ have interpolating lines with roots in $S$ (generally fewer); thus, there are at least $\left|\mathcal{C}\right| - n(\left|K\right|-2)$ triples disjoint from $S$ (generally more).
-% \rigo{Moreover, for each point $P_i \in S$, there are $\left|K\right|-2$ distinct, non-vertical, non-tangent lines passing through $P_i$, so at most $n(\left|K\right|-2)$ lines have roots in $S$. To find the amount of triples disjoint from $S$, we would subtract $n\left(\left|K\right|-2\right)$ from $\left|\mathcal{C}\right|$. However, additional care must be taken, because since $n$ of these point-slope pairs had a vertical slope, we actually don't have any such point-slope pairs in $\left|\mathcal{C}\right|$. Indeed, since all $P,Q,R$ inside $\left|\mathcal{C}\right|$ are distinct, then no instance where the points are vertically collinear occur. To account for this, we add an $n$ back. Thus, there are at least $\left|\mathcal{C}\right| - n\left|K\right|+n$ triples disjoint from $S$.}
-%%%%% >>>>>> stuff to be reconsidered??
-% There are $\left|\G\right| - (n+1)$ choices of non-identity $P$ which do not collide with any $P_i$ and $\left|K\right|-2$ non-vertical non-tangent lines passing through such a $P$, so there are $\left(\left|\G\right| - (n+1)\right)\left(\left|K\right|-2\right)$ point-slope pairs from which we sample $P$, and all of these have two distinct non-identity roots elsewhere. 
-% \rigo{Regarding these point-slope pairs, they will fall into three categories: 
-% \begin{itemize}
-%     \item None of the remaining roots are contained in $A$. If this were the case, then we would have $\left|\left\{A \cap B \neq \emptyset \mid B \in \mathcal{C}\right\}\right| = \left(\left|\G\right| - (n+1)\right)\left(\left|K\right|-2\right)$
-%     \item One of the remaining roots is contained in $A$. If this were the case, then we would have $\left|\left\{A \cap B \neq \emptyset \mid B \in \mathcal{C}\right\}\right| = \left(\left|\G\right| - (n+1)\right)\left(\left|K\right|-2\right) - n$
-%     \item Both of the remaining roots are contained in $A$. If this were the case, then we would have $\left|\left\{A \cap B \neq \emptyset \mid B \in \mathcal{C}\right\}\right| = \left(\left|\G\right| - (n+1)\right)\left(\left|K\right|-2\right) - \frac{n}{2}$
-% \end{itemize} 
-% As a result, it is clear to see that, $\left(\left|\G\right| - (n+1)\right)\left(\left|K\right|-2\right) - n \leq \left|\left\{A \cap B \neq \emptyset \mid B \in \mathcal{C}\right\}\right| \leq \left(\left|\G\right| - (n+1)\right)\left(\left|K\right|-2\right)$
-% }
-% We then see that at most $\frac{1}{2}n(n-1)$ of these lines have either of their additional roots in the set $\left\{P_1, \ldots, P_n\right\}$.
+At first glance, one might assume that there are multiple $R$ points which satisfy this relationship, but this is not the case. Indeed, suppose we have distinct $R_1,R_2 \in \G$ such that: 
+$$P+R_1+R_1=O \quad \text{ and } \quad P+R_2+R_2=O$$
+Since $R_1\neq R_2$, we can subtract the two equations to yield $$(P-P)+(R_1-R_2)+(R_1-R_2)=O-O \quad \Rightarrow \quad 2(R_1-R_2)=O$$ As $\left|\mathbb{G}\right|$ is prime and greater than $3$,  have that $\mathbb{G}$ has no non-identity points with even order, which is a contradiction. Thus, there are $\left|K\right|-2$ non-tangent lines passing through any non-identity point $P$ which intersect $\E$ at two other distinct non-identity points.
+
+Moreover, there are $\left|\G\right|-1$ choices of non-identity $P$. Thus, we have $\left|\mathcal{C}\right| = (\left|\G\right|-1)\left(\left|K\right|-2\right)$. Furthermore, for each point $P_i \in S$, there are $\left|K\right|-2$ distinct non-tangent lines passing through $P_i$, so at most $n(\left|K\right|-2)$ elements of $\mathcal{C}$ have interpolating lines with roots in $S$ (generally fewer); thus, there are at least $\left|\mathcal{C}\right| - n(\left|K\right|-2)$ triples disjoint from $S$ (generally more).
 \end{proof}
 
 We obtain the following corollary immediately, but omit the proof. The proof is not illuminating and yet follows straightforwardly from using $v_p(\ell^*)$ as a choice of $T$ in Lemma \ref{lem:number_collinear_triples}.
 
 \begin{corollary}
 \label{cor:prob_collinear_triples}
-Following Lemma \ref{lem:number_collinear_triples}, assuming $\ell \lsamp K[X,Y]$, the event that $\ell^*$ intersects $\E^*$ transversally at $3$ distinct points is exactly $E = v_p(\ell^*) \in \mathcal{C} \wedge v_p(\ell^*) \cap S = \emptyset$. Moreover, $\text{Pr}\left[E \mid \ell \lsamp K[X,Y]\right] \geq 1-\frac{n}{\left|\G\right|-1}$.
+Following Lemma \ref{lem:number_collinear_triples}, if  $\ell \lsamp \left\{f \in K[X,Y] \mid \text{deg}(f) = 1\right\}$, the event $E$ that $\ell$ intersects $\E$ transversally at $3$ distinct rational points is exactly the intersection of events $v_p(\ell) \in \mathcal{C}$ and $v_p(\ell) \cap S = \emptyset$. Moreover, $\text{Pr}\left[E\right] \geq 1-\frac{n}{\left|\G\right|-1}$.
 \end{corollary}
 
-Note that if $n=1$ then calling $\texttt{Wit}$ yields a failure symbol $\bot$, as a sum of a single point cannot be a nontrivial decomposition of $O \in \G$. If calling $\texttt{Wit}$ with $n = 2$, we have two non-identity points $P_0, P_1$ such that $P_0 + P_1 = O$, but $P_i + P_j \neq O$ for any $i,j$.
+It should be noted that the order of $\G$ being a prime greater than $3$ is necessary. Counterexamples can easily be generated otherwise. Namely, in \cite{bassapersonal}, a counterexample was provided,  the curve $\E: Y^2 = X^3 + 2X + 3$ over $K=\Z/7\Z$ has six points in the corresponding elliptic curve group (so $\G \cong \Z_2 \times \Z_3$) and only has $2$ lines which intersect $\E$ at $3$ distinct points.
+
+Note that $\left|\G\right| > 3$ and is prime, then $\G$ contains no $3$-points, i.e.\ no nontrivial decompositions of $[O]$ into a single point. If $n=1$ then calling $\texttt{Wit}$ yields a failure symbol $\bot$, as a sum of a single point cannot be a nontrivial decomposition of $O \in \G$. If calling $\texttt{Wit}$ with $n = 2$, we have two non-identity points $P_0, P_1$ such that $P_0 + P_1 = O$, but $P_i + P_j \neq O$ for any $i,j$.
 
 \begin{lemm}
 \label{lem:witnessCorrectness}
-Let $n \geq 3$ and let $\left\{P_0, P_1, \ldots, P_{n-1}\right\} \subseteq \G$ be a multi-subset of non-identity points such that $\sum_i P_i = O$ and $P_i + P_j \neq O$ for any $i,j$. Then $\texttt{Wit}(P_0, P_1, P_2, \ldots, P_{n-1})$ does not fail, runs in time $t = O(n)$, and outputs some $f$ such that there exists $m \in \mathbb{Z}$ satisfying $\text{div}(f) = \sum_{i=0}^{n-1} [P_i] - m[O]$. 
+Let $n \geq 3$ and let $\left\{P_0, P_1, \ldots, P_{n-1}\right\} \subseteq \G^n$ be a multi-subset of non-identity points such that $\sum_i P_i = O$ and $P_i + P_j \neq O$ for any $i,j$. Then $\texttt{Wit}(P_0, P_1, P_2, \ldots, P_{n-1})$ does not fail, runs in time $t = O(n)$, and outputs some $f$ such that there exists $m \in \mathbb{Z}$ satisfying $\text{div}(f) = \sum_{i=0}^{n-1} [P_i] - m[O]$. 
 \end{lemm}
 \begin{proof}
 Pre-processing in $\texttt{Wit}$ prepares the following $\lceil \frac{n}{2}\rceil$ pairs:
 
-\begin{align}
+\begin{align*}
 \begin{cases}
 (P_0, P_1), (P_2, P_3), \ldots, (P_{n-2}, P_{n-1});& n \text{ even} \\
  (P_0, P_1), (P_2, P_3), \ldots, (P_{n-1}, O);& n \text{ odd} 
  \end{cases}
-\end{align}
+\end{align*}
 and computes the interpolating line $\ell_j = \texttt{line}(A_j,B_j)$ for each pair $(A_j, B_j)$ with $0 \leq j \leq \lceil \frac{n}{2}\rceil$. Recall $\texttt{line}(P_{n-1},O)$ is the line tangent to $\E$ at $P_{n-1}$. 
 Then, the point $T_j = A_j + B_j$ is computed, the degree $m_j$ is computed (which is $2$ when $A_j \neq B_j$ are both non-identity and $1$ when $A_j = O$ or $B_j = O$). Each triple $(m_j, T_j, \ell_j)$ is enqueued. 
 
 Once this queue is constructed, the primary loop begins.
 In the while-loop, $\texttt{Wit}$ pops pairs of triples at a time and merges them.  Note that for any one of these initial lines, $\text{div}(\ell_j) = [A_j] + [B_j] + [-(A_j+B_j)]$ (disregarding the $[O]$ term to be concise). 
 
-We claim that all the triples which enter the queue are of the form $(m, T, f)$ where $T=\sum_i \Omega_i$ for some non-identity points $\Omega_i \in \G(\E)$, and such that $\text{div}(f) = \sum_i [\Omega_i] + [-\sum_i \Omega_i]$. Certainly the initial lines satisfy this. Moreover, for each $(m_f, T_f, f)$, $(m_g, T_g, g)$ in the queue, say $T_f = \sum_i \Omega_i$ and $T_g = \sum_j \Theta_j$, write the non-identity terms of the divisors $\text{div}(f) = \sum_i [\Omega_i] + [-T_f]$ and $\text{div}(g) = \sum_j [\Theta_j] + [-T_g]$ and notice the merged function field element is $h=fg\frac{\texttt{line}(T_f,T_g)}{\texttt{line}(T_f,-T_f)\texttt{line}(T_g,-T_g)}$. The new degree $m_f + m_g$ is computed, and $(m_f + m_g, T_f + T_g, h)$ is enqueued. For this $h$, we note that we have the following.
-\begin{align}
+We claim that all the triples which enter the queue are of the form $(m, T, f)$ where $T=\sum_i \Omega_i$ for some non-identity points $\Omega_i \in \G(\E)$, and such that $\text{div}(f) = \sum_i [\Omega_i] + [-\sum_i \Omega_i]$. Certainly the initial lines satisfy this. Moreover, for each $(m_f, T_f, f)$, $(m_g, T_g, g)$ in the queue, say $T_f = \sum_i \Omega_i$ and $T_g = \sum_j \Theta_j$ for $\Theta_i \in \G(\E)$, write the non-identity terms of the divisors $\text{div}(f) = \sum_i [\Omega_i] + [-T_f]$ and $\text{div}(g) = \sum_j [\Theta_j] + [-T_g]$ and notice the merged function field element is $h=fg\frac{\texttt{line}(T_f,T_g)}{\texttt{line}(T_f,-T_f)\texttt{line}(T_g,-T_g)}$. The new degree $m_f + m_g$ is computed, and $(m_f + m_g, T_f + T_g, h)$ is enqueued. For this $h$, we note that we have the following.
+\begin{align*}
 \text{div}(h) =& \text{div}\left(fg\frac{\texttt{line}(T_f,T_g)}{\texttt{line}(T_f,-T_f)\texttt{line}(T_g,-T_g)}\right) \\
 =& \text{div}(f)+ \text{div}(g) + \text{div}(\texttt{line}(T_f,T_g)) - \text{div}(\texttt{line}(T_f,-T_f)) - \text{div}(\texttt{line}(T_g,-T_g)) \\
 =& \sum_i [\Omega_i] + [-T_f] + \sum_j [\Theta_j] + [-T_g] + [T_f] + [T_g] \\& + [-(T_f+T_g)] - [T_f] - [-T_f] - [T_g] - [-T_g] \\
 =& \sum_i [\Omega_i] + \sum_j [\Theta_j] + [-(T_f + T_g)] \\
-=& \sum_i [\Omega_i] + \sum_j [\Theta_j] + [-(\sum_i \Omega_i + \sum_j \Theta_j)] 
-\end{align}
+=& \sum_i [\Omega_i] + \sum_j [\Theta_j] + \Big[-\big(\sum_i \Omega_i + \sum_j \Theta_j\big)\Big] 
+\end{align*}
 Hence, every entry of $\texttt{queue}$ is a triple $(m, T, f) \in \N \times \G(\E) \times K(\E)$ such that $\text{div}(f) = \sum_i [P_i] + [-\sum_i P_i] - m[O]$ as claimed.
 
 Furthermore, by inspection, we see that, regardless of the order in which these merge operations take place, we eventually obtain a function field element $h$ with divisor $\sum_i [P_i] + [-(\sum_i P_i)]$. If the input points $\left\{P_i\right\}_i$ are a nontrivial decomposition of $O$, then $[-(\sum_i P_i)] = [O]$, so $\text{div}(h) = \sum_i [P_i]$ as desired.
@@ -987,7 +1073,18 @@ Furthermore, by inspection, we see that, regardless of the order in which these 
 % The first iteration of the while-loop computes up to $\lceil \frac{n}{2} \rceil$ products and creates up to these many over-represented terms. The second iteration computes up to $\lceil \frac{n}{4} \rceil$ products and creates up to these many over-represented terms. Thus the run time is up to $2^{k-1}n\left(1 + 2^{-1} + 2^{-2} + \cdots + 2^{-k}\right) =n(2^{k}-\frac{1}{2}) \leq 2^k n$
 \end{proof}
 
-Note that in \cite{Kayaba}, the line interpolating $P$ with $-P$ is confused for the line tangent to $\E$ at $P$, introducing an erroneous point in the purported principal divisors. 
+Note that in \cite{Kayaba}, the line interpolating $P$ with $-P$ is confused for the line tangent to $\E$ at $P$, introducing an erroneous point in the purported principal divisors. This error has been communicated. 
+
+
+
+
+
+
+
+
+
+
+
 
 
 \begin{corollary}
@@ -1002,14 +1099,18 @@ In the sequel, we assume witnesses output from $\texttt{Wit}$ have unit denomina
 
 
 \begin{theorem}\label{thm:DivisorCompleteness}
-Let $\E$ be nonsingular with prime-order $\G(\E)$ such that $\left|\G\right| > 3$. $\Pi$ is a proving system for the relation $\R_{\text{div}}^\prime$ from Equation \ref{theRelation} with completeness error $\kappa \leq \frac{n}{\left|\G\right|-1}$.
+Let $\E$ be non-singular with prime-order $\G(\E)$ such that $\left|\G\right| > 3$. $\Pi$ is a proving system for the relation $\R_{\text{div}}^\prime$ from Equation \ref{theRelation} with completeness error $\kappa \leq \frac{n}{\left|\G\right|-1}$.
 \end{theorem}
 \begin{proof}
-Presume that $f \in K(\E)$, $[\nu] = \text{div}(f)$, and the prover honestly executes $\texttt{Prove}$. Then the following occurs.
+Presume that $f \in K(\E)$, $[\nu] = \text{div}(f)$, and the prover honestly executes $\texttt{Prove}$. 
+
+Note that if the witness is not a $p^{th}$ power, the witness yields  derivatives which evaluate to $0$ everywhere. This may influence the completeness error. In practice, $p$ is quite large, making these issues very rare, and only impacting the case when $f$ has an impractically large degree. Thus, we restrict our completeness argument to witnesses $f$ which are not $p^{th}$ powers as in Equation \ref{theRelation}.
+
+Then the following occurs during the execution of $\texttt{Prove}$.
 \begin{enumerate}[(a)]
 \item The prover executes $\texttt{Prove}$ step \ref{prove1} to compute $\texttt{out} \leftarrow \texttt{Wit}(\texttt{params},[\nu])$. Following Lemma \ref{lem:witnessCorrectness}, $\texttt{out} = f \in K(\E)$ with certainty, where $\bot \neq f = \frac{f_1(X) + Yf_2(X) + (e(X,Y))}{f_3(X) + (e(X, Y))}$ and $f_3(X) = 1$.
 
-\item The prover executes $\texttt{Prove}$ steps \ref{prove2} to compute $(P,Q) \leftarrow H(\texttt{params}, f, [\nu])$, interpolates these points, and executes $\texttt{Prove}$ step \ref{prove3} to compute $R = -(P+Q)$. Note the constraints that $P, Q \neq O$ and $P \neq \pm Q$ admit an interpolating line $\ell$ which is not vertical and not tangent to $\E$, so $R \neq \pm P$ and $R \neq \pm Q$. Thus, the set $\left\{P,Q,R\right\}$ is sampled uniformly from the set of all $3$-sets of  collinear non-identity points on $\E$, i.e.\ the set $\mathcal{C}$ from Lemma \ref{lem:number_collinear_triples}. By Corollary \ref{cor:prob_collinear_triples}, the probability of failure when computing these two steps is at most $\frac{n}{\left|\G\right|-1}$. 
+\item The prover executes $\texttt{Prove}$ step \ref{prove2} to compute $(P,Q) \leftarrow H(\texttt{params}, f, [\nu])$, interpolates these points, and executes $\texttt{Prove}$ step \ref{prove3} to compute $R = -(P+Q)$. Note the constraints that $P, Q \neq O$ and $P \neq \pm Q$ admit an interpolating line $\ell$ which is not vertical and not tangent to $\E$, so $R \neq \pm P$ and $R \neq \pm Q$. Thus, the set $\left\{P,Q,R\right\}$ is sampled uniformly from the set of all $3$-sets of  collinear non-identity points on $\E$, i.e.\ the set $\mathcal{C}$ from Lemma \ref{lem:number_collinear_triples}. By Corollary \ref{cor:prob_collinear_triples}, the probability of failure when computing these two steps is at most $\frac{n}{\left|\G\right|-1}$. 
 
 % On the other hand, there are $\left|\G \setminus \left\{O, P_1, \ldots, P_n\right\}\right| = \left|\G\right| - n - 1$ group elements which miss the divisor points, so $\frac{1}{6}\left(\left|\G\right| - n - 1\right)\left(\left|\G\right| - n - 2\right)$ triples do not collide with the points $\left\{P_1, \ldots, P_n\right\}$. Hence, the probability of failure here is $Pr\left[\left\{P, Q, R\right\} \cap \left\{P_1, \ldots, P_n\right\} \neq \emptyset\right]  = 1-\left(1-\frac{n}{\left|\G\right|-1}\right)\left(1-\frac{n}{\left|\G\right|-2}\right) = O\left(\frac{n^2}{\left|\G\right|^2}\right)$. This is asymptotically $O(\left|\G\right|^{-2})$, but concrete choices of $n$ and $\G$ may lead to insecurity. 
 % See Section \ref{} \free{EMPTY REF????} for more about this.
@@ -1025,28 +1126,50 @@ So, $\texttt{Prove}$ has accepting probability at least $1 - \frac{n}{\left|\G\r
 \item The verifier computes $R = -(P+Q)$ and checks for a collision. Conditioned on an honest prover and a successful execution of $\texttt{Prove}$,  the points $P, Q, R$ do not collide with the points $\left\{P_i\right\}$, so the verifier does not output $0$ in $\texttt{Verify}$ step \ref{verify2}.
 
 \item Conditioned on an honest prover, a successful execution of $\texttt{Prove}$, and the verifier not yet terminating, then all the computations in $\texttt{Verify}$ step \ref{verify3} succeed with certainty and the verifier obtains the following.
-\begin{align}
-b_1 =& 2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P) \\
-c_1 =& 2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)\\
-b_2 =& 2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda ) \Delta X\\
-c_2 =& - 2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))\\
-b_3 =& 2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)\\
-c_3 =& 2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q) \\
-b_4 =& 2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X\\ 
-c_4 =& 2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))
-\end{align} 
+% \begin{align*}
+% b_1 =& 2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P) \\
+% c_1 =& 2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)\\
+% b_2 =& 2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda ) \Delta X\\
+% c_2 =& - 2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))\\
+% b_3 =& 2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)\\
+% c_3 =& 2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q) \\
+% b_4 =& 2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X\\ 
+% c_4 =& 2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))
+% \end{align*} 
+\begin{align*}
+N_1 =& \non \\
+N_2 =& \ntw \\
+N_3 =& \nth \\
+N_4 =& \nfo \\
+N_5 =& \nfi \\
+N_6 =& \nsi \\
+D =& \den 
+\end{align*} 
 
 \item Conditioned on an honest prover, a successful execution of $\texttt{Prove}$, and the verifier not yet terminating, all the following are satisfied with certainty.
-\begin{align}
+\begin{align*}
 A_i =& (y_i - \lambda x_i - \mu)^{-1}\text{ for each }i \\
-B_1 =& \frac{2y_P f_X(P) + (3x_P^2+\alpha)f_Y(P)}{2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P)} = \frac{c_1}{b_1}\\
-B_2 =& - \frac{2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))}{2y_Py_Rf(R)(3x_P^2+\alpha-2\lambda y_P)\Delta X} = \frac{c_2}{b_2} \\
-B_3 =& \frac{2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q)}{2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)} = \frac{c_3}{b_3} \\
-B_4 =& \frac{2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))}{2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X} = \frac{c_4}{b_4}
-\end{align}
-Thus, each $(y_i - \lambda x_i - \mu)A_i = 1$ for each $1 \leq i \leq n$ and $b_i B_i = c_i$ for each $1 \leq i \leq 4$. So, the verifier does not output $0$ in $\texttt{Verify}$ step \ref{verify4}.
+N_1 =& \non \\
+N_2 =& \ntw \\
+N_3 =& \nth \\
+N_4 =& \nfo \\
+N_5 =& \nfi \\
+N_6 =& \nsi \\
+D =& \den 
+\end{align*}
+Thus,
 
-\item In Equation \ref{deltafhat} of the Appendix, we show $\delta(\widehat{f}(X_P,Y_P,X_Q,Y_Q))\mid_{P,Q} = B_1 + B_2 + B_3 + B_4$.   We also have $\widehat{f}(x_P,y_P,x_Q,y_Q) = f(P)f(Q)f(R)$, and by Weil's reciprocity, $f(P)f(Q)f(R) = \prod_{i=1}^{n} (y_i - \lambda x_i - \mu)^{m_i}$, where $Y - \lambda X - \mu$ is the line interpolating $P$, $Q$, and $R$. Hence, $\delta(\widehat{f})\mid_{P,Q} = \sum_{i=1}^{n} \frac{m_i}{y_i-\lambda x_i - \mu}$. The verifier checked above that $(y_i-\lambda x_i - \mu)A_i = 1$, so $\delta(\widehat{f})\mid_{P,Q} = \sum_i m_i A_i$, implying verification is passed; the verifier outputs $1$ with certainty.
+\renewcommand\labelitemi{--}
+\begin{itemize}
+\item $(y_i - \lambda x_i - \mu)A_i = 1$ for each $1 \leq i \leq n$
+\item $\VerEquA$
+\item $\VerEquB$
+\item $\VerEquC$
+\item $\VerEquD$
+\end{itemize}
+So, the verifier does not output $0$ in $\texttt{Verify}$ step \ref{verify4}.
+
+\item In Equation \ref{deltafhat} of the Appendix, we show $\delta(\widehat{f}(X_P,Y_P,X_Q,Y_Q)) \bigm\vert_{P,Q} = \left( \sum_{i = 1}^6 N_i \right) \cdot D^{-1}$.   We also have $\widehat{f}(x_P,y_P,x_Q,y_Q) = f(P)f(Q)f(R)$, and by Weil reciprocity, $f(P)f(Q)f(R) = \prod_{i=1}^{n} (y_i - \lambda x_i - \mu)^{m_i}$, where $Y - \lambda X - \mu$ is the line interpolating $P$, $Q$, and $R$. Hence, $\delta(\widehat{f}) \bigm\vert_{P,Q} = \sum_{i=1}^{n} \frac{m_i}{y_i-\lambda x_i - \mu}$. The verifier checked above that $(y_i-\lambda x_i - \mu)A_i = 1$, so $\delta(\widehat{f}) \bigm\vert_{P,Q} = \sum_i m_i A_i$, implying verification is passed; the verifier outputs $1$ with certainty.
 \end{enumerate}
 
 By inspection, it is clear that the only case of failure is in the case of a bad sample of $(P, Q)$, which occurs with probability at most $\frac{n}{\left|G\right|-1}$. 
@@ -1062,81 +1185,65 @@ By inspection, it is clear that the only case of failure is in the case of a bad
 
 We note that the scheme can be completed with respect to $\mathcal{R}_{\text{div}}^\prime$ by  allowing provers to include random context strings $\texttt{ctx} \in \left\{0,1\right\}^*$ in their proofs for use as prefixes for the hash computing $P, Q$, resampling $\texttt{ctx}$ until $\texttt{Prove}$ succeeds. Since the completeness error above is $\frac{n}{\left|\G\right|-1}$, the prover can expect to resample once every $\frac{1}{n}\left(\left|\G\right|-1\right)$ proofs, because the completeness error is $\frac{n}{\left|\G\right|-1}$. However, this completeness error is already negligible in the security parameter governing $\left|\G\right|$, so completing the scheme with respect to $\mathcal{R}_{\text{div}}^\prime$ is not practically necessary.
 
-Moreover, the scheme can be extended to all of $\mathcal{R}_{\texttt{div}}$ by modifying $\texttt{Wit}$ to output vertical lines given input divisors with $\left|\text{supp}(\nu)\right| = 2$, because no single points on $\G(\E)$ can be principal divisors for a non-singular $\E$ with $\left|\G(\E)\right| > 3$. 
+Moreover, the scheme can be extended to all of $\mathcal{R}_{\texttt{div}}$ by modifying $\texttt{Wit}$ to output vertical lines given input divisors with $\left|\text{supp}(\nu)\right| = 2$. This covers all of $\mathcal{R}_{\texttt{div}}$ because $\G(\E)$ has prime order greater than $3$, and therefore no triple-points.
+
 However, checking whether two points are inverses already only requires comparing two elements of $K$ against each other, and comparing two sign/parity bits against each other. In this way, divisors-based proofs cannot improve the efficiency of checking whether a point inverse has been computed correctly; thus, extending to all of $\mathcal{R}_{\texttt{div}}$ is also not practically necessary.
 
 \begin{lemm}
-Let $\nu: \E \to \Z$ such that $\left|\text{supp}(\nu)\right| < \infty$, and let $f \in K(\E)^\times$. If, for every $\ell \in K(\E)$ with $\text{deg}(\ell) = 1$, $\widehat{f}(\text{div}(\ell)) = \ell([\nu])$, then $[\nu] = \text{div}(f)$.
+Let $\nu: \E \to \Z$ such that $\left|\text{supp}(\nu)\right| < \infty$, and let $f \in K(\E)^\times$. If, for every $\ell \in K(\E)$ with $\text{deg}(\ell) = 1$ and whose roots are disjoint from the roots and poles of $f$, $\widehat{f}(\text{div}(\ell)) = \widehat{\ell}([\nu])$, then $[\nu] = \text{div}(f)$.
 \label{lem:biggestlemma}
 \end{lemm}
 \begin{proof}
-Define $\delta: \E \to \Z$ such that $\delta(T) = \nu(T) - \text{ord}_T(f)$ for every $T \in \E$. Then $\text{div}(f)=[\nu] + [\delta] \in \text{Prin}(\E)$. Thus, it is sufficient to show that $\delta = 0$. 
+Define $\delta: \E \to \Z$ such that $\delta(T) = \nu(T) - \text{ord}_T(f)$ for every $T \in \E$. Then $\text{div}(f)=[\nu] + [\delta] \in \text{Prin}(\E)$. Thus, it is sufficient to show that $\delta(T) = 0$ for every $T \in \E$ (or, equivalently, $[\delta] = [O]$).
 
-Assume (in pursuit of a contradiction) that some $P_0 \in \text{supp}(\delta)$. By Weil's reciprocity, $\widehat{f}(\text{div}(\ell)) = \widehat{\ell}(\text{div}(f)) = \widehat{\ell}([\nu] + [\delta])$. By Theorem \ref{thm:inducedmaphom}, $\widehat{\ell}([\nu] + [\delta]) = \widehat{\ell}([\nu]) \cdot \widehat{\ell}([\delta])$. By assumption, $\widehat{f}(\text{div}(\ell)) = \widehat{\ell}([\nu])$. Hence, $\widehat{\ell}([\nu]) = \widehat{\ell}([\nu])\widehat{\ell}([\delta])$, so $1 = \widehat{\ell}([\delta])$. However, this must hold for any line $\ell$, even a line $\ell$ with a root in the support of $\delta$, a contradiction. 
+In pursuit of contradiction, assume some $P_0 \in \text{supp}(\delta)$. By Weil reciprocity, $\widehat{f}(\text{div}(\ell)) = \widehat{\ell}(\text{div}(f)) = \widehat{\ell}([\nu] + [\delta])$. By Theorem \ref{thm:inducedmaphom}, $\widehat{\ell}([\nu] + [\delta]) = \widehat{\ell}([\nu]) \cdot \widehat{\ell}([\delta])$. By assumption, $\widehat{f}(\text{div}(\ell)) = \widehat{\ell}([\nu])$. Hence, $\widehat{\ell}([\nu]) = \widehat{\ell}([\nu])\widehat{\ell}([\delta])$, so $1 = \widehat{\ell}([\delta])$. However, this must hold for any line $\ell$, a contradiction unless $[\delta] = [0]$.
 \end{proof}
 
 
 
 \begin{theorem}\label{thm:DivisorSoundness}
-$\Pi$ is a proving system for the relation $\R_{\text{div}}$ from Equation \ref{theRelation} with 
+$\Pi$ has
 % $$\R = \left\{(f, \text{div}(f)) \mid f \in K(\E) \text{ and } \text{div}(f) \in Prin(\G) \right\}$$ with 
-soundness error $\frac{n}{2\left|K\right|\left(\left|K\right|-1\right)}$.
+soundness error $\frac{n}{2\left|K\right|\left(\left|K\right|-1\right)}$ for the relation $\R_{\text{div}}$ from Equation \ref{theRelation}.
 \end{theorem}
 \begin{proof}
-We show that if $\nu: \G\setminus\left\{O\right\} \to \Z$ has $\left|\text{supp}(\nu)\right| = n$ and $\pi \in \frac{K[X,Y]}{(e)} \times K^{n+4}$, say $\pi=(f, A_1, \ldots, A_n, B_1, \ldots, B_4)$, is any proof such that $\texttt{Verify}([\nu], \pi) = 1$, then $[\nu] = \text{div}(f)$ with probability at least $1 - \frac{n}{2\left|K\right|(\left|K\right|-1)}$.
+We show that if $\nu: \G\setminus\left\{O\right\} \to \Z$ has $\left|\text{supp}(\nu)\right| = n$ and $\pi \in \frac{K[X,Y]}{(e)} \times K^{n+1}$, say $\pi=(f, A_1, \ldots, A_n, N_1, \ldots, N_6)$, is any proof such that $\texttt{Verify}([\nu], \pi) = 1$, then $[\nu] = \text{div}(f)$ with probability at least $1 - \frac{n}{2\left|K\right|(\left|K\right|-1)}$.
 
-Assume $\texttt{Verify}([\nu], \pi) = 1$. Then $\pi = (f,  A_1, \ldots, A_n, B_1, B_2, B_3, B_4)$ for some $f \in K(\E)$ and some $A_1, \ldots, A_n, B_1, B_2, B_3, B_4 \in K$, otherwise the verifier would output $0$ in the first step, a contradiction. Moreover, the verifier computes challenge points with the hash function $H$, say $(P, Q) \leftarrow H(\texttt{params}, f, [\nu])$, such that $P \neq \pm Q$; indeed, otherwise the verifier would output $0$ in the second step, a contradiction.  The verifier computes $R = -(P + Q)$, and finds that $P \neq \pm R$ and $Q \neq \pm R$ and $\left\{P, Q, R\right\} \cap \left\{P_i\right\}_{i=1}^{n} = \emptyset$, otherwise the verifier would output $0$ in the third step, a contradiction. Thus, the verifier successfully computes $\Delta X$, $\Delta Y$, $\lambda$, $\mu$, $R$, and $(b_i, c_i)$ for $i=1$, $2$, $3$, and $4$, yielding the following 
+Assume $\texttt{Verify}([\nu], \pi) = 1$. Then $\pi = (f,  A_1, \ldots, A_n, N_1, N_2, N_3, N_4, N_5, N_6, D^{-1})$ for some $f \in K(\E)$ and some $A_1, \ldots, A_n, N_1, N_2, N_3, N_4, N_5, N_6, D^{-1} \in K$, otherwise the verifier would output $0$ in the first step, a contradiction. Moreover, the verifier computes challenge points with the hash function $H$, say $(P, Q) \leftarrow H(\texttt{params}, f, [\nu])$, such that $P \neq \pm Q$; indeed, otherwise the verifier would output $0$ in the second step, a contradiction.  The verifier computes $R = -(P + Q)$, and finds that $P \neq \pm R$ and $Q \neq \pm R$ and $\left\{P, Q, R\right\} \cap \left\{P_i\right\}_{i=1}^{n} = \emptyset$, otherwise the verifier would output $0$ in the third step, a contradiction. Thus, the verifier successfully computes $\Delta X$, $\Delta Y$, $\lambda$, $\mu$, $D$, and $N_i$ for $i=1, \dots, 6$, yielding the following 
 % \free{ADDRESS THIS FOOTNOTE} \footnote{MACRO THESE}.
-\begin{align}
+\begin{align*}
 \Delta X =& x_Q - x_P \\
 \Delta Y =& y_Q - y_P \\
 \lambda =& \frac{\Delta Y}{\Delta X} \\
 \mu =& y_P - \lambda x_P \\
-b_1 =& 2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P) \\
-c_1 =& 2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)\\
-b_2 =& 2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda ) \Delta X\\
-c_2 =& - 2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))\\
-b_3 =& 2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)\\
-c_3 =& 2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q) \\
-b_4 =& \left(2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X\right)\\
-c_4 =& 2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))
-\end{align}
-At this point, the verifier finds $(y_i - \lambda x_i - \mu)A_i = 1$ for each $i=1$, $2$, $\ldots$, $n$, otherwise the verifier would output $0$ after this check. Thus, the verifier is assured each $A_i = (y_i - \lambda x_i - \mu)^{-1}$ with certainty.
-Then the verifier finds that $b_iB_i = c_i$ for each $i=1$, $2$, $3$, and $4$, otherwise the verifier would output $0$ after this check. Thus, the verifier is assured that each of these satisfy $B_i = c_i/b_i$ with certainty. Lastly, the verifier finds that $B_1 + B_2 + B_3 + B_4 = \sum_i m_i A_i$. Hence, the verifier is assured that the following is satisfied with certainty.
-\[\frac{c_1}{b_1} + \frac{c_2}{b_2} + \frac{c_3}{b_3} + \frac{c_4}{b_4} = \sum_i \frac{m_i}{y_i-\lambda x_i \mu}\]
-Moreover, since the verifier verified the numerators and denominators in this equation,  the verifier concludes the following.
-
-\begin{align*}
-    & \frac{2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)}{2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P)} 
-    - \frac{2\lambda y_P(2y_Rf_X(R) + (3x_R^2+\alpha) f_Y(R))(3x_P^2+\alpha - 2y_P(\lambda + \Delta X))}{2y_Py_Rf(R)(3x_P^2+\alpha-2y_P \lambda ) \Delta X} \\
-    &+ \frac{2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q)}{2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)} + \frac{2\lambda y_Q(2y_Rf_X(R) + (3x_R^2+\alpha)f_Y(R))(3x_Q^2+\alpha - 2y_Q(\lambda + \Delta X))}{2y_Qy_Rf(R)(3x_Q^2+\alpha  - 2\lambda y_Q) \Delta X} \\
-    &= \sum_i \frac{m_i}{y_i-\lambda x_i \mu}
+N_1 =& \non \\
+N_2 =& \ntw \\
+N_3 =& \nth \\
+N_4 =& \nfo \\
+N_5 =& \nfi \\
+N_6 =& \nsi \\
+D =& \den 
 \end{align*}
-
-By Equations \ref{dfp} and \ref{dfq} in the Appendix, the verifier knows the following.
-
-\[\frac{2y_Pf_X(P) + (3x_P^2+\alpha) f_Y(P)}{2y_Pf(P)(3x_P^2+\alpha-2\lambda y_P)} = \delta(f(X,Y))\mid_{(X, Y)=(x_P,y_P)}\]
-\[\frac{2y_Qf_X(Q) + (3x_Q^2+\alpha) f_Y(Q)}{2y_Qf(Q)(3x_Q^2+\alpha - 2\lambda y_Q)} = \delta(f(X,Y))\mid_{(X,Y)=(x_Q,y_Q)}\]
-Also, the verifier knows the derivation $d$ (and therefore the logarithmic derivative $\delta$) on $K(\E)$ over $K$ extends to the function fields for the product variety $K(\E^2)$. Thus, $\delta(f(X_R, Y_R))\mid_{(P,Q)}$ is as follows due to Equation \ref{dfr}.
-
-
-% \begin{align}
-% df(R) =& f_X(R)dX_R + f_Y(R) dY_R \\
-% =& (f_X(R) + Y^\prime_R f_Y(R))dX_R \\
-% df(R) =& \frac{2\Lambda(f_X(R) + Y^\prime_R f_Y(R))}{\Delta X}\Big(\left(Y_Q^\prime - \Lambda - \Delta X\right) dX_Q  - \left(Y_P^\prime - \Lambda + \Delta X\right)dX_P\Big) \label{dfr}
-% \end{align}
-
-\begin{align}
-% \frac{2\Lambda(f_X(R) + Y^\prime_R f_Y(R))}{\Delta X f(R)}\left(\left(Y_Q^\prime - \Lambda - \Delta X\right)dX_Q - \left(Y_P^\prime - \Lambda + \Delta X\right)dX_P\right) \\
-\frac{2\lambda(f_X(R) + y^\prime_R f_Y(R))}{(x_Q-x_P) f(R)}\left(\frac{y_Q^\prime - \lambda - (x_Q-x_P)}{y_Q^\prime - \lambda} - \frac{y_P^\prime - \lambda + (x_Q-x_P)}{y_P^\prime - \lambda}\right) = \delta\big(f(X,Y)\big)\mid_{(P,Q)}
-\end{align}
-where in this case, $\delta$ is the logarithmic derivative on on $K(\E^2)$. Since $\delta$ is a group homomorphism from the multiplicative subgroup of $K(\E^2)$ to the additive group of principal divisors, the verifier knows the sum of these three terms is certainly as follows.
-\[\delta\big(f(P)f(Q)f(R)\big) = \delta\big(\widehat{f}(X_P,Y_P,X_Q,Y_Q)\big)\mid_{(X_P,Y_P,X_Q,Y_Q)=(x_P,y_P,x_Q,y_Q)}\] Hence, the following holds.
-$$\delta\big(\widehat{f}(X_P,Y_P,X_Q,Y_Q)\big)\mid_{(X_P,Y_P,X_Q,Y_Q)=(x_P,y_P,x_Q,y_Q)} = \sum_i \frac{m_i}{y_i-\lambda x_i \mu}$$
+At this point, the verifier finds:
+\renewcommand\labelitemi{--}
+\begin{itemize}
+\item $(y_i - \lambda x_i - \mu)A_i = 1$ for each $1 \leq i \leq n$
+\item $\VerEquA$
+\item $\VerEquB$
+\item $\VerEquC$
+\item $\VerEquD$
+\end{itemize}
+% $(y_i - \lambda x_i - \mu)A_i = 1$ for each $i=1, \dots, n$, otherwise the verifier would output $0$ after this check. Thus, the verifier is assured each $A_i = (y_i - \lambda x_i - \mu)^{-1}$ with certainty.
+% Then the verifier finds that $b_iB_i = c_i$ for each $i=1, \dots, 4$, otherwise the verifier would output $0$ after this check. Therefore the verifier is assured that each of these satisfy $B_i = c_i/b_i$ certainly. Lastly, the verifier finds that $B_1 + B_2 + B_3 + B_4 = \sum_i m_i A_i$. 
+Hence, the verifier is assured that the following is satisfied with certainty.
+\[\left( \sum_{i = 1}^6 N_i \right) \cdot D^{-1} = \sum_i \frac{m_i}{y_i-\lambda x_i - \mu}\]
+Moreover, since the verifier verified the numerators and denominators in this equation,  the verifier concludes the verification equations from Section \ref{AppendixOne} are satisfied.
+In particular, Equation \ref{deltafhat} is satisfied.  Hence, the following holds.
+$$\delta\big(\widehat{f}(X_P,Y_P,X_Q,Y_Q)\big) \bigm\vert_{(X_P,Y_P,X_Q,Y_Q)=(x_P,y_P,x_Q,y_Q)} = \sum_i \frac{m_i}{y_i-\lambda x_i \mu}$$
 Of course, the verifier also knows that, for the line $\ell$ interpolating $P$ and $Q$, the equality \\
-$\sum_i \frac{m_i}{y_i-\lambda x_i \mu} = \sum_i \delta\big(\ell(X_i,Y_i)\big)\mid_{(X_i,Y_i)=(x_i,y_i)}$ holds, where this time $\delta$ is the logarithmic derivative on $K(\E^n)$. As before, this $\delta$ is a homomorphism, so the verifier concludes the following equality.
+$\sum_i \frac{m_i}{y_i-\lambda x_i \mu} = \sum_i \delta\big(\ell(X_i,Y_i)\big) \bigm\vert_{(X_i,Y_i)=(x_i,y_i)}$ holds, where this time $\delta$ is the logarithmic derivative on $K(\E^n)$. As before, this $\delta$ is a homomorphism, so the verifier concludes the following equality.
 \begin{align}
-\delta\big(\widehat{f}(X_P,Y_P,X_Q,Y_Q)\big)\mid_{(X_P,Y_P,X_Q,Y_Q)=(x_P,y_P,x_Q,y_Q)} =& \delta\left(\prod_{i=1}^{n} \ell(X_i,Y_i)^{m_i}\right)\mid_{\left\{(X_i,Y_i)\right\}_i=\left\{(x_i,y_i)\right\}_i} \label{verfequality}
+\delta\big(\widehat{f}(X_P,Y_P,X_Q,Y_Q)\big) \Bigm\vert_{(X_P,Y_P,X_Q,Y_Q)=(x_P,y_P,x_Q,y_Q)} =& \delta\left(\prod_{i=1}^{n} \ell(X_i,Y_i)^{m_i}\right) \Biggm\vert_{\left\{(X_i,Y_i)\right\}_i=\left\{(x_i,y_i)\right\}_i} \label{verfequality}
 \end{align}
 The verifier recalls that, for a fixed $f$ (and therefore fixed $(P_i, m_i)$ pairs), both $f(P)f(Q)f(R)$ and $\prod_i \ell(X_i,Y_i)^{m_i}$ are rational functions in the variables $(X_P, Y_P, X_Q, Y_Q)$, so $(x_P, y_P, x_Q, y_Q)$ is a root of $f(P)f(Q)f(R) - \prod_i \ell(X_i,Y_i)^{m_i}$. %the following rational function.
 % \begin{align}
@@ -1155,10 +1262,9 @@ The verifier recalls that, for a fixed $f$ (and therefore fixed $(P_i, m_i)$ pai
 % If $\text{div}(f) \neq \sum_i m_i [P_i]$. 
 The Schwartz-Zippel lemma 
 % in Lemma \ref{lem:schwarz-zippel} 
-states that, if $g \in K[Z_1, \ldots, Z_n]$, $S \subseteq K^n$ is a finite set, $\vec{z} \lsamp S$ is sampled uniformly at random, and $g(\vec{z}) = 0$, then the probability that $g \neq 0 \in K[\left\{Z_i\right\}_i]$ is at most $\frac{n}{\left|S\right|}$. This extends to rational functions by finding common denominators.
+states that, if $g \in K[Z_1, \ldots, Z_n]$, $S \subseteq K^n$ is a finite set, $\vec{z} \lsamp S$ is sampled uniformly at random, and $g(\vec{z}) = 0$, then the probability that $g \neq 0$ in $K[\left\{Z_i\right\}_i]$ is at most $\frac{n}{\left|S\right|}$. This extends to rational functions by clearing denominators.
 
-In this case, the polynomial ring is the coordinate ring of the product variety $\E^2$, namely $K[X_P,Y_P,X_Q,Y_Q]/(e(X_P,Y_P), e(X_Q,Y_Q))$, the sampled evaluation quadruple is $(x_P,y_P,x_Q,y_Q)$, and the rational function is $f(P)f(Q)f(R) - \prod_i \ell(X_i,Y_i)^{m_i}$. The hash function samples $(x_P,y_P,x_Q,y_Q)$ such that $x_P \neq x_Q \in K$; from these, a single bit each is necessary to determine $y_P$ and $y_Q$. A sample $x_P \neq x_Q$ without regard to order comes from a set with $\frac{1}{2}\left|K\right|\left(\left|K\right|-1\right)$ elements, and a sample of two bits can be obtained from a set with $4$ elements. Thus, $\left|S\right| = 2\left|K\right|\left(\left|K\right|-1\right)$, so the probability that $f(P)f(Q)f(R) - \prod_i \ell(X_i,Y_i)^{m_i} \neq 0$ is at most $\frac{n}{2\left|K\right|\left(\left|K\right|-1\right)}$.
-
+In this case, the polynomial ring is the coordinate ring of the product variety $\E^2$, namely $K[X_P,Y_P,X_Q,Y_Q]/(e(X_P,Y_P), e(X_Q,Y_Q))$, the sampled evaluation quadruple is $(x_P,y_P,x_Q,y_Q)$, and the rational function is $f(P)f(Q)f(R) - \prod_i \ell(X_i,Y_i)^{m_i}$. The hash function is used to sample $(P,Q)$ such that $x_P \neq x_Q \in K$. A sample $x_P \neq x_Q$ without regard to order comes from a set with $\frac{1}{2}\left|K\right|\left(\left|K\right|-1\right)$ elements, and a sample of two bits can be obtained from a set with $4$ elements. Thus, $\left|S\right| = 2\left|K\right|\left(\left|K\right|-1\right)$, so the probability that $f(P)f(Q)f(R) - \prod_i \ell(X_i,Y_i)^{m_i} \neq 0$ is at most $\frac{n}{2\left|K\right|\left(\left|K\right|-1\right)}$.
 Now the conclusion of the proof is simply a corollary of Lemma \ref{lem:biggestlemma}.
 \end{proof}
 
@@ -1173,7 +1279,7 @@ Now the conclusion of the proof is simply a corollary of Lemma \ref{lem:biggestl
 
 
 
-\subsection{Computational refinements}
+\subsection{Computational Refinements}
 
 % In the generic divisors framework we present, the points $P$ and $Q$, and therefore $R$, may be selected non-interactively by utilizing the Fiat-Shamir heuristic.
 % This may be implemented practically under the random oracle model with a hash function whose codomain is $(\G\setminus\left\{O\right\})^2$, but care must be taken to avoid vulnerabilities with the weak Fiat-Shamir transform: all public parameters must be included in the hash digest, including commitments, previous randomness, user tags, and salt.
@@ -1196,9 +1302,94 @@ As a second improvement, one can go even farther: instead of the prover communic
 In this manner, the prover can communicate the randomness used in their proofs in a way that is logarithmic in $N$, the total number of proofs.
 The benefit that this approach provides is most apparent when utilized non-interactively, as it permits for more compact proof sizes.
 
+
+
+
+
+
+\subsubsection{Interpolation}
+
+On the subject of interpolating, when tasked with interpolating a curve over a field (usually taken to be the real numbers, but everything stated here works similarly over a finite field), the most well known choice is generally Lagrange interpolation, though this is far from being the only choice (Newton, Chebyshev, Hermite, etc). 
+Indeed, selecting the interpolation nodes uniformly across the curve is usually the most prudent choice only when the degree of the curve is low \cite{Trefethen}.
+In this section, we instead outline the barycentric variant of Lagrange interpolation, in which the interpolation points are chosen, relative to the center of mass instead of uniformly across the curve, in some sense.
+Practically, the barycentric version is generally more efficient than the standard Lagrange interpolation, but one notable improvement is that it permits updating of the nodes. 
+To update node $x_k$ to a different value $x_k'$, this means that one must start from the very beginning when using Lagrange, but the barycentric method handles this case easily.
+
+Historically, this term derives from a system of $n$ particles $\{x_i\}_{i=1}^n$, each $x_i$ with weight $w_i$, where the barycenter, or center of mass, satisfies the following:
+\begin{align}\label{BarycentricEqn}
+    \sum_{i=1}^n w_i \cdot (x - x_i) &= 0. 
+\end{align}
+
+% $$\sum_{i=1}^n w_i \cdot (x - x_i) = 0.$$
+Barycentric interpolation then poses the following question: given nodes $\{x_i\}_{i=1}^n$ and an arbitrary point $x$, do there exists weights $\{w_i\}_{i=1}^n$ such that $x$ is the barycenter, i.e.: that satisfies the above Equation \ref{BarycentricEqn}.
+There exists some numerical evidence to claim that this approach results in improved computational efficiency during our interpolation step. See the FCMP divisors code optimization competition \cite{monero2025fcmp,Fabrizio}, also see \url{https://libera.monerologs.net/monero-research-lab/20250716#c542261}.
+
+
+
+Consider the case of $n$ interpolation nodes $\{x_i\}_{i=1}^n$ that correspond to samples of a function $f$ as $f(x_i) = f_i$.
+The founding problem that interpolation seeks to address is to find a polynomial $p \in K[X]$  with $\text{deg}(p) \leq n-1$ satisfying $p(x_i) = f_i$ for all $i$.
+This is typically solved using Lagrange interpolation, where one begins by determining the Lagrange polynomials $\ell_i$ such that $\ell_i(x_j) = \delta_{i,j}$, meaning that the $\ell_i$'s evaluate to $1$ when $i=j$ and $0$ otherwise. 
+These Lagrange polynomials take the following form: 
+$$\ell_i(x) = \prod\limits_{\substack{{j=1} \\ {i \neq j}}}^n \frac{x-x_j}{x_i-x_j}.$$
+Then, the interpolating polynomial is
+$$p(x) = \sum_{i=1}^n f_i \ell_i(x).$$
+
+It can easily be shown that this polynomial is unique: suppose that $q(x)$ is another interpolating polynomial that also has $\text{deg}(q) \leq n-1$. 
+Then the difference between $p(x)$ and $q(x)$ is a (maximally) degree $n-1$ polynomial with $n$ roots at each of the nodes, hence must be the zero function. 
+From another standpoint, uniqueness may be seen from the invertibility of the Vandermonde matrix, as distinct nodes implies that the resulting Vandermonde determinant is non-zero.
+
+% Then $r(x) = p(x) - q(x)$ is a polynomial, also with degree $n-1$, that is zero at the nodes $\{x_i\}_{i=1}^n$. However, the only polynomial with degree strictly smaller than the number of roots is the zero polynomial, hence $r(x)=0$, so $p$ and $q$ actually represent the same polynomial.
+% From another standpoint, uniqueness may be seen from the invertibility of the Vandermonde matrix, as distinct nodes implies that the resulting Vandermonde determinant is non-zero.
+
+
+
+Each evaluation of $p$ naively requires $O(n^2)$ additions and multiplications, but cannot be updated to append a new interpolation node $x_{n+1}$ or change a node to a new value without completely recomputing from the beginning, which is why this method is generally not utilized in practice, but rather more computationally efficient versions \cite{Trefethen}.
+
+% One practical method is Newton interpolation, which generates a Newton tableau of divided differences. 
+% This method requires only $O(n)$ operations to evaluate $p$, though we note this without \free{I'm gonna remove this section}
+
+The interpolation method above can be improved by taking advantage of the barycentric weights $w_i$ for $i=1, \dots, n$, which we define as 
+$$w_i = \prod\limits_{\substack{{j=1} \\ {i \neq j}}}^n \frac{1}{x_i - x_j}.$$
+Since the numerator of $\ell_i$ can be written as 
+$\ell(x) = (x-x_1) \cdots (x-x_n),$
+one can see that the barycentric weights satisfy the equation $w_i = \frac{1}{\ell'(x_i)}$, hence for $i=1, \dots, n$ the barycentric basis $\{\ell_i\}_{i=1}^n$ can be defined as 
+$$\ell_i(x) = \ell(x) \cdot \frac{w_i}{x-x_i}.$$
+In fact, the barycentric basis can be characterized by the following three properties:
+\begin{align*}
+    & \text{Partition of unity} \quad \quad \quad \ \sum_{i=1}^n \ell_i(x) = 1, \\
+    & \text{Lagrange property} \quad \quad \quad \, \ell_i(x_j) = \delta_{i,j}, \\
+    & \text{Barycentric property} \quad \quad \sum_{i=1}^n \ell_i(x) \cdot x_i = x,
+\end{align*}
+where the first two properties of characteristic of Lagrange interpolation.
+% The diligent reader may readily verify this claim for themselves.
+Then, the (first form of the) interpolating polynomial can be expressed with barycentric weights as the following
+$$p(x) = \ell(x) \cdot \sum_{i=1}^n \frac{w_i}{x-x_i} f_i.$$
+
+
+
+This formulation requires only $O(n)$ calculations to evaluate $p$, assuming that the weights $\{w_i\}_{i=1}^n$ have been precomputed, which is a substantial improvement over the original Lagrange interpolation.
+Additionally, this version can be updated in $O(n)$ to include a new node $x_{n+1}$, by dividing each weight $\{w_i\}_{i=1}^n$ by $x_i - x_{n+1}$ then constructing $w_{n+1}$ the same as before, which is in opposition to the standard Lagrange interpolation that could not be updated at all once computed.
+Additionally, if one considers higher degree polynomials than just the lines that we take to be sufficient here, the barycentric interpolation has a particularly efficient method of computing derivatives of the polynomial interpolant.
+
+When considering the partition of unity requirement, since the constant function $\chi(x) = 1$ for all $x$ is the unique polynomial with degree $\leq n-1$ that interpolates the nodes $\{(x_i, 1)\}_{i=1}^n$, we can simplify further by dividing by $\chi$, resulting in (the second form of) the barycentric formula 
+$$p(x) = \left( \sum_{i=1}^n \frac{w_i}{x-x_i} \right)^{-1} \left( \sum_{i=1}^n \frac{w_i}{x-x_i} f_i \right).$$
+This particular form has some advantages: for instance, it avoids calculating $\ell(x)$.
+
+
+
+
+
 \subsubsection{Fast Polynomial Multiplication}
 
-If the scheme only needs to handle divisors with some uniform bound on support cardinalities (i.e.\ only divisors $[\nu]$ with $\left|\text{supp}(\nu)\right| \leq N$ for a fixed $N \in \texttt{params}$), then all witnesses will have bounded degrees. In this case, a careful choice of $\text{char}(K) = p$ may allow number-theoretic transform (NTT) speedups to polynomial multiplication in $K[X,Y]$.
+If the scheme only needs to handle divisors with some uniform bound on support cardinalities (i.e.\ only divisors $[\nu]$ with $\left|\text{supp}(\nu)\right| \leq N$ for a fixed $N \in \texttt{params}$), then all witnesses will have bounded degrees. In this case, a careful choice of $\text{char}(K) = p$ may allow elliptic curve fast Fourier transform (ECFFT) speedups to polynomial multiplication in $K[X,Y]$.
+In addition, for certain special fields, ECFFT methods can interpolate in $O(n \cdot \log(n))$, though for a general field it has a marginally worse runtime of $O(n \cdot \log(n)^2)$ \cite{Fabrizio}, hence we still recommend the barycentric method for interpolation.
+
+
+
+
+
+
+
 
 
 
@@ -1210,11 +1401,12 @@ If the scheme only needs to handle divisors with some uniform bound on support c
 
 \section{Applications}
 
-In this section, we highlight a number of practical use cases. By utilizing divisors, these applications benefit from a marked computational improvement to the verifier's checks, however they also enjoy the zero-knowledge property from their underlying zero-knowledge proof.
+
+In this section, we highlight a number of practical use cases. Any time a public key is computed from a private key, or a Pedersen commitment is opened, or a message is signed with a Schnorr signature, SILVer bullet provides verifiability. By utilizing divisors, these applications benefit from a marked computational improvement to the verifier's checks, but moreover they also enjoy the zero-knowledge property from their underlying zero-knowledge proof, which cannot be said of every protocol utilizing divisors from the literature.
 
 % In this next section, we will repeatedly use $x \lsamp S$ to mean that element $x$ was sampled uniformly at random from the set $S$, but otherwise the notation from before remains largely unchanged.
 In this next section, we use $\star$ to denote the entrywise vector product, alternately referred to as the Hadamard or Schur product. 
-We define $\vec{y} = (1, y, \dots, y^{n-1})$ as the Vandermonde vector for a non-zero field element $y \in K^\times$, which permits the verifier to generate a test vector from a single field element that will be used to ensure the validity of the prover's computations.  
+We define $\vec{y} = (1, y, \dots, y^{n-1})$ as the Vandermonde vector for a non-zero field element $y \in K^\times$, which permits the verifier to generate a test vector from a single field element that ensures the validity of the prover's computations.  
 We refer to \cite{HammR} for a proof that distinct values of $y$ lead to linearly independent test vectors $\vec{y}$, so it is sufficient to query the prover for distinct values.
 Finally, for a cyclic group $\G$, we store group generators in vectors, namely $G = (G_1, \, \dots, \, G_n)$ where $G_i \in \G$ for each $i$.
 Utilizing additive notation then, for $a \in K$, we write $a G$ to denote the weighted sum $\sum_{i=1}^n a_i G_i$. 
@@ -1226,12 +1418,13 @@ This collapses $n$ elliptic curve multiplications into a single point, so knowle
 
 
 
-\subsection{Schnorr identification}
+\subsection{Schnorr Identification Scheme}
+
 
 To begin, we showcase the classic Schnorr protocol from \cite{Schnorr}, which is a zero-knowledge proof system that is complete, sound, and zero-knowledge.
 In Algorithm \ref{alg:SchnorrDivisors} we describe how the Schnorr identification protocol is modified by the divisor approach presented above.
 The incorporation of divisors alters the soundness and completeness error negligibly, but accelerates the verifier's final check, and hence reduces the proof size. 
-While it is unfounded to expect that the divisors approach is ever zero-knowledge, the Schnorr protocol enjoys this feature, and hence, this protocol can represent an efficient zero-knowledge proof system.
+While it is unfounded to expect that divisors by themselves to attain zero-knowledge, the Schnorr protocol enjoys this feature, and hence this protocol represents an efficient zero-knowledge proof system.
 
 
 
@@ -1297,7 +1490,7 @@ While it is unfounded to expect that the divisors approach is ever zero-knowledg
     % && Check: $\sum\limits_{i=0}^k z_i B_i \stackrel{?}{=} P + cR$ \\
 
     % \hline
-    Set $\nu = \sum\limits_{i=0}^k z_i \cdot [B_i] - [P] - c \cdot [R]$ &&\\
+    Set $\nu = \sum\limits_{i=0}^k [z_i B_i] + [-P] + [-cR]$ &&\\
     $\pi \leftarrow \texttt{Prove}(\nu)$ & $\xrightarrow{\quad \pi \quad}$ &\\
 
     && Recompute $\nu$ \\
@@ -1342,9 +1535,10 @@ While it is unfounded to expect that the divisors approach is ever zero-knowledg
 
 
 In Algorithm \ref{alg:SchnorrDivisors}, we present an improvement upon the traditional Schnorr scheme interactive protocol, leveraging the divisors framework. 
-Utilizing divisors, the prover can replace the traditional last step communicating $z$ with the exhibited communication of the proof $\pi$.
-Then the verifier's check in the above portion - which traditionally requires $k+2$ costly elliptic curve point multiplications - can be replaced with an efficiently computable divisor sum. 
+Utilizing divisors, the prover can replace the traditional last step communicating $z$ alone with the exhibited communication of the proof $\pi$.
+Then the verifier's check in the above portion - which would require $k+2$ costly elliptic curve point multiplications - can be replaced with an efficiently computable divisor sum. 
 So with a marginal increase in communication, the verifier can offload the bulk of their computation to the prover.
+This is exactly the case that cryptocurrencies are concerned with, because a transaction proof only needs to be generated once, but has to be verified many times - hence offloading the verifiers' computations onto the prover leads to reduced costs overall.
 
 
 
@@ -1356,14 +1550,14 @@ So with a marginal increase in communication, the verifier can offload the bulk 
 \begin{proof}
     Because the Schnorr scheme is zero-knowledge, this desirable property is carried over in our divisors approach. 
     More precisely, if any party can extract information about the secret from the divisors, then they could have in the original Schnorr scheme as well.
-    There will be a nominal change to the completeness and soundness error, due to the arguments presented in Section \ref{sec:SecurityProps} (specifically Theorems \ref{thm:DivisorCompleteness} and \ref{thm:DivisorSoundness}), but this alteration is negligible in $|\G|$, so does not cause problems.
+    The completeness and soundness error change nominally, due to the arguments presented in Section \ref{sec:SecurityProps} (specifically Theorems \ref{thm:DivisorCompleteness} and \ref{thm:DivisorSoundness}), but this alteration is negligible in $|\G|$, so does not cause problems.
 \end{proof}
 
 The result is a $3$-pass interactive protocol that preserves the zero-knowledge property of the Schnorr scheme (importantly, the divisor approach presented in \cite{SoundnessForDLP} is not zero-knowledge) while drastically reducing the verifier's computations, with a minimal hit to communication.
 % The verifier's last check above, which traditionally requires computing point multiplications, can be expedited using divisors, speeding up verification time.
-After applying the Fiat-Shamir heuristic to transform this zero-knowledge proof protocol into a signature scheme, where we reiterate that all the public parameters must be included in the hash input, the proof's verification time will therefore be heavily reduced at the cost of a negligible increase in the proof size.
+After applying the Fiat-Shamir heuristic to transform this zero-knowledge proof protocol into a signature scheme, where we reiterate that all the public parameters must be included in the hash input, the proof's verification time reduce heavily at the cost of a negligible increase in the proof size.
 
-Additional care will be necessary to account for attacks on adaptive security on threshold Schnorr signatures. Indeed, \cite{PlausibleAttack} recently highlighted how adaptive adversaries can threaten various schemes without appropriate modifications. That is unfortunately outside of the scope of this work, but given the novelty of the referred work, it was worth mentioning.
+Additional care is necessary to account for attacks on adaptive security on threshold Schnorr signatures. Indeed, \cite{PlausibleAttack} recently highlighted how adaptive adversaries can threaten various schemes without appropriate modifications. That is unfortunately outside of the scope of this work, but given the novelty of the referred work, it was worth mentioning.
 
 
 
@@ -1371,8 +1565,8 @@ This foundation leads to more generic zero-knowledge proof systems in which the 
 We note that the above approach can be applied to the Chaum-Pedersen \cite{ChaumPedersen} or Okamoto \cite{Okamoto} schemes as well, with minimal changes.
 % This is of particular importance if the verifier is interacting on some sort of memory-constrained device, or a device lacking in computing power.
 As such, this particularly pertains to cryptocurrencies like Lelantus Spark \cite{LelantusSpark} or Salvium \cite{Salvium}, or indeed, FCMP++ in Monero \cite{FCMP}.
-Divisors are of marked interest for cryptocurrencies, because transactions must be repeatedly verifiable over the life of the blockchain - a single proof will be verified a great many times, so it behooves the protocol designers to offload the verifier's computations onto the prover, who must only generate the proof once.
-Below, we highlight how this divisors framework can be used to improve the verification time for the Bulletproofs protocol \cite{Bullet} specifically, which is implemented in a wide range of cryptocurrency settings. In future work, we hope to showcase how, through MuSig techniques, this can be optimized further such that the prover only needs to send a single batch proof.
+Divisors are of marked interest for cryptocurrencies, because transactions must be repeatedly verifiable over the life of the blockchain - a single proof gets verified a great many times, so it behooves the protocol designers to offload verifier computations onto the prover, who must only generate the proof once.
+Below, we highlight how this divisors framework can be used to improve the verification time for the Bulletproofs protocol \cite{Bullet} specifically, which is implemented in a wide range of cryptocurrency settings. In future work, we hope to showcase how, through MuSig \cite{MuSig} and linkable ring signature \cite{LRS} techniques, this can be optimized further such that the prover only needs to send a single batch proof.
 
 
 
@@ -1390,7 +1584,7 @@ Below, we highlight how this divisors framework can be used to improve the verif
 \subsection{Bulletproofs}
 
 We point out that these ideas may also be applied to the verification procedure in the range proof of Bulletproofs \cite{Bullet}.
-Bulletproofs offers an astoundingly efficient way to demonstrate that a committed number $v \in K$, for $\text{char}(K) = p$ large enough compared to $n$, is constrained to some interval $[0, \, 2^n-1]$. Specifically, it provides a proof of the following relation:
+Bulletproofs offers an astoundingly efficient way to demonstrate that a committed value $v \in K$, taken in the original paper to be $K = \Z_p$ with $p$ large enough compared to $n$, is constrained to some interval $[0, \, 2^n-1]$. Specifically, it provides a proof of the following relation:
 $$\R_{R} = \{n \in \N, g, h \in \G; \ v, \gamma \in K \mid V = vg + \gamma h \text{ and } v \in [0, \, 2^n-1]\}.$$
 The construction is quite clever; we recreate it below for completeness.
 
@@ -1477,11 +1671,11 @@ We present the setup protocol for Bulletproofs in Algorithm \ref{alg:BPSetup}, w
     Set $\delta = (z - z^2) \ip{\one}{\vec{y}} - z^3 \ip{\one}{\vec{2}}$ &&\\
 
     % \hline 
-    Set $v_1 = [A] + x_0 [S] - (z - L) [G] $ &&\\
-    \quad \quad $+ (z \vec{y} + z^2 \vec{2} - R) [H'] - \mu [h]$ &&\\
+    Set $v_1 = [A] + [x_0 S] + [(L - z) G] $ &&\\
+    \quad \quad $+ [(z \vec{y} + z^2 \vec{2} - R) H'] + [- \mu h]$ &&\\
 
-    Set $v_2 = z^2 [V] + (\delta - t) [g]  - \tau [h]$ &&\\
-    \quad \quad $+ x_0 [T_1] + x_0^2 [T_2]$ &&\\
+    Set $v_2 = [z^2 V] + [(\delta - t) g] + [-\tau h]$ &&\\
+    \quad \quad $+ [x_0 T_1] + [x_0^2 T_2]$ &&\\
 
 
     % Set $v_3 = t - \langle L, R \rangle$ &&\\
@@ -1609,130 +1803,458 @@ Utilizing divisors, these $6n+11$ point multiplications can be reduced to diviso
 
 \appendix
 
-\section{Deriving verification equations}\label{sec:derivation}
+\section{Deriving Verification Equations}\label{sec:derivation}
 
 Much of the narrative herein are used in supporting arguments for our completeness and soundness proofs above. All the derivations here are included in full for reference. 
 
-\subsection{Logarithmic derivative of function field elements at the zeroes of a line}
+\subsection{Logarithmic Derivative of a Function Field Element at the Zeroes of a Line}
+\label{AppendixOne}
 
-In this section, we formalize taking the logarithmic derivative of $f(P)f(Q)f(R)$ where $P + Q + R = O$ in the group law. Indeed, for any $T \in \mathcal{E}$, $f(T)$ is just an element of $K$, and so $dT = 0$. However, if $P, Q, R$ are handled as variable points on the curve $\E$, say by introducing indeterminates $X_P$, $Y_P$, $X_Q$, $Y_Q$, $X_R$, and $Y_R$, then a derivation on $K(\E)$ extends naturally to a derivation on $K(\E^3)$. However, given $P$ and $Q$, there is a unique $R$ satisfying $P + Q + R = O$, so we only need indeterminates $X_P$, $Y_P$, $X_Q$, and $Y_Q$.
+% In this section, we formalize taking the logarithmic derivative of $f(P)f(Q)f(R)$ where $P + Q + R = O$ in the group law. Indeed, for any $T \in \mathcal{E}$, $f(T)$ is just an element of $K$, and so $dT = 0$. However, if $P, Q, R$ are handled as variable points on the curve $\E$, say by introducing indeterminates, $Y_P$, $X_Q$, $Y_Q$, $X_R$, and $Y_R$, then a derivation on $K(\E)$ extends naturally to a derivation on $K(\E^2)$ by using $\frac{\partial}{\partial X_P}$, $\frac{\partial}{\partial X_Q}$, $\frac{\partial}{\partial Y_P}$, and $\frac{\partial}{\partial Y_Q}$. However, given $P$ and $Q$ such that $P \neq Q$ and the interpolating line betwixt them isn't tangent to $\E$, there is a unique $R$ satisfying $P + Q + R = O$, so we only need indeterminates $X_P$, $Y_P$, $X_Q$, and $Y_Q$.
 
-Note that although these are all indeterminates over $K$, some $Y$ is not indeterminate over $K[X]$. Indeed, $Y$ is uniquely determined by $X$ up to sign. Thus, we could instead use indeterminates $X_P$, $S_P$, $X_Q$, $S_Q$ for indeterminates $S_P$ and $S_Q$ acting as variables for sign bits. However, this can significantly complicate the following formulae. Thus, despite that each $Y$ is almost uniquely determined by each $X$, we still have four degrees of freedom in the choice of $P$ and $Q$ by using $X_P$, $Y_P$, $X_Q$, and $Y_Q$, and we instead treat $X_R$ and $Y_R$ as functions of $P$ and $Q$.
+% Note that although these are all indeterminates over $K$, some $Y$ is not indeterminate over $K[X]$. Indeed, $Y$ is uniquely determined by $X$ up to sign. Thus, we could instead use indeterminates $X_P$, $S_P$, $X_Q$, $S_Q$ for indeterminates $S_P$ and $S_Q$ acting as variables for sign bits. However, this can significantly complicate the following formulae. Thus, despite that each $Y$ is almost uniquely determined by each $X$, we still have four degrees of freedom in the choice of $P$ and $Q$ by using $X_P$, $Y_P$, $X_Q$, and $Y_Q$, and we instead treat $X_R$ and $Y_R$ as functions of $P$ and $Q$.
 
-We start with an arbitrary derivation $d$ over $K$ on the function field $K(\E)$. Since $Y^2 - X^3 - \alpha X - \beta = 0$, we have $dY = \frac{3X^2+\alpha}{2Y}dX$. Write $Y^\prime = \frac{3X^2+\alpha}{2Y}$ for short. Define the following as functions of $P=(X_P, Y_P)$ and $Q=(X_Q,Y_Q)$.
+% We start with an arbitrary derivation $d$ over $K$ on the function field $K(\E)$. Since $Y^2 - X^3 - \alpha X - \beta = 0$, we have $dY = \frac{3X^2+\alpha}{2Y}dX$. Write $Y^\prime = \frac{3X^2+\alpha}{2Y}$ for short. Define the following as functions of $P=(X_P, Y_P)$ and $Q=(X_Q,Y_Q)$.
+
+% % The labels for deltaX and deltaY were not referenced at all, so I still used align*
+% \begin{align*}
+% \Delta X =& X_Q - X_P \\
+% \Delta Y =& Y_Q - Y_P 
+% \end{align*}
+% \begin{align}
+% \Lambda =& \frac{\Delta Y}{\Delta X} \label{BigLambda} 
+% \end{align}
+% \begin{align}
+% d\Lambda =& \frac{\Delta X d \Delta Y - \Delta Y d \Delta X}{(\Delta X)^2} \nonumber \\
+% =& \frac{d\Delta Y - \Lambda d \Delta X}{\Delta X} \nonumber \\
+%  =& \frac{(dY_Q - \Lambda dX_Q) - (dY_P - \Lambda dX_P)}{\Delta X} \nonumber \\
+% =& \frac{\left(Y^\prime_Q - \Lambda\right)dX_Q - \left(Y^\prime_P - \Lambda\right)dX_P}{\Delta X} \label{dBigLambda}
+% \end{align}
+
+% \begin{align}
+% M =& Y_P - \Lambda X_P \label{bigM}
+% \end{align}
+
+% \begin{align}
+% dM =& dY_P - \Lambda dX_P - X_P d\Lambda \nonumber \\
+% =& \left(Y_P^\prime - \Lambda\right) dX_P - X_P d\Lambda \nonumber \\
+% =& \left(Y_P^\prime - \Lambda\right) dX_P - X_P\frac{\left(Y_Q^\prime - \Lambda\right)dX_Q - \left(Y_P^\prime - \Lambda\right)dX_P}{\Delta X} \nonumber \\
+% =& \left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q + \frac{X_P}{\Delta X}\left(Y_P^\prime - \Lambda\right)dX_P \nonumber \\
+% =& \left(1+\frac{X_P}{\Delta X}\right)\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q \nonumber \\
+% =& \frac{X_Q}{\Delta X}\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q \label{dBigM}
+% \end{align}
+
+% \begin{align}
+% X_R =& \Lambda^2 - X_P - X_Q \label{xr}\\
+% Y_R^2 =& X_R^3 + \alpha X_R + \beta \label{yr2}\\
+% R =& (X_R, Y_R) \label{r}
+% \end{align}
+
+% \begin{align}
+% dX_R =& 2\Lambda d\Lambda - dX_P - dX_Q \nonumber \\
+% =& \frac{2\Lambda}{\Delta X} \Big( \left(Y_Q^\prime - \Lambda\right)dX_Q - \left(Y_P^\prime - \Lambda\right)dX_P\Big) - dX_P - dX_Q \nonumber \\
+% =& \frac{2\Lambda}{\Delta X}\left(Y_Q^\prime-\Lambda - \Delta X\right)dX_Q - \frac{2\Lambda}{\Delta X}\left(Y_P^\prime-\Lambda + \Delta X\right)dX_P \label{dxr}
+% \end{align}
+
+
+% \begin{align}
+% dY_R =& \frac{dY_R}{dX_R}dX_R \nonumber \\
+% =& \frac{3X_R^2+\alpha}{2Y_R} dX_R \nonumber \\
+% =& Y_R^\prime dX_R \label{dyr}
+% \end{align}
+
+% Now we can compute $df(P)$, $df(Q)$, and $df(R)$ as follows. Note our abuse of notation; by $df(P)$, we mean $(d(f))(P)$. That is, the specific function of $df$ evaluated specifically at $P$ rather than the derivation of $f(P)$, which would obviously be 0.
+
+% \begin{align}
+% df(P) =& f_X(P) dX_P + f_Y(P) dY_P \nonumber \\
+% =& (f_X(P) + f_Y(P)Y_P^\prime)dX_P \label{dfp}\\
+% df(Q) =& (f_X(Q) + f_Y(Q)Y_Q^\prime)dX_Q \label{dfq}
+% \end{align}
+
+% \begin{align}
+% df(R) =& f_X(R)dX_R + f_Y(R) dY_R \nonumber \\
+% =& (f_X(R) + Y^\prime_R f_Y(R))dX_R \nonumber \\
+% df(R) =& \frac{2\Lambda(f_X(R) + Y^\prime_R f_Y(R))}{\Delta X}\Big(\left(Y_Q^\prime - \Lambda - \Delta X\right) dX_Q  - \left(Y_P^\prime - \Lambda + \Delta X\right)dX_P\Big) \label{dfr}
+% \end{align}
+% We now compute $\delta(\widehat{f})$ only as a rational function of $(X_P, Y_P, X_Q, Y_Q)$. 
+
+% \begin{align}
+% \delta(\widehat{f}) =& \frac{df(P)}{f(P)} + \frac{df(Q)}{f(Q)} + \frac{df(R)}{f(R)}  \nonumber \\
+% =& \frac{df(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}dX_P \nonumber \\& \quad + \frac{df(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}dX_Q \nonumber \\
+% =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)dX_P \nonumber \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)dX_Q  \label{deltawidehatf}
+% \end{align}
+
+% We are particularly interested in the case that $d(Y-\lambda^* X - \mu^*) = 1$ for some fixed $(\lambda^*, \mu^*) \in K^2$.
+
+% \begin{align*}
+% 1 =& dY - \lambda dX  \\
+% 1 =& (Y^\prime - \lambda) dX \\
+% dX =& (Y^\prime - \lambda)^{-1}
+% \end{align*}
+% Note then that $d\Lambda = dM = 0$, and $\delta(\widehat{f})$ becomes the following.
+
+% \begin{align*}
+% \delta(\widehat{f}) =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)dX_P \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)dX_Q \\
+% =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)(Y_P^\prime - \lambda^*)^{-1} \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)(Y_Q^\prime - \lambda^*)^{-1}
+% \end{align*}
+
+
+% \subsection{What happened?}
+
+In this section, we formalize taking the logarithmic derivative of $f(P)f(Q)f(R)$ for collinear, distinct, non-identity points $P, Q, R \in \E$. Indeed, for any $T \in \mathcal{E}$, $f(T)$ is just an element of $K$, and so $dT = 0$, yet a variable point is a rational function of transcendental elements with non-zero derivation in general.
+
+Recall that any points $P, Q, R$ which are collinear, distinct, and non-identity necessarily satisfy $P + Q + R = O$ in the group law.
+
+To handle  $P, Q, R$ as variable points on the curve $\E$, say by introducing transcendental elements $X_P$, $Y_P$, $X_Q$, and $Y_Q$, where $X_P$ corresponds to the $x$-coordinate of (variable) point $P$, and $Y_P$ is the $y$-coordinate of $P$, and similarly for (variable) point $Q$. Then a derivation on $K(\E)$ extends naturally to a derivation on $K(\E^2)$ via partial derivations $\frac{\partial}{\partial X_P}$, $\frac{\partial}{\partial X_Q}$, $\frac{\partial}{\partial Y_P}$, and $\frac{\partial}{\partial Y_Q}$.
+
+Given $P$ and $Q$ such that $P \neq Q$ and such that the interpolating line betwixt them isn't tangent to $\E$, there is a unique $R$ satisfying $P + Q + R = O$, so we only need transcendentals $X_P$, $Y_P$, $X_Q$, and $Y_Q$ to determine $X_R$ and $Y_R$; moreover these are rational functions in $X_P$, $Y_P$, $X_Q$, and $Y_Q$.
+
+Note that although these are all transcendental over $K$, they are not indeterminates and satisfy algebraic relationships between each other, such as the Weierstrass equation $Y^2 = X^3 + \alpha X + \beta$ or the relationship that $Y$ is uniquely determined by $X$ up to sign. 
+
+We start with an arbitrary derivation $d$ over $K$ on the function field $K(\E)$. Since $Y^2 - X^3 - \alpha X - \beta = 0$, we have $dY = \frac{3X^2+\alpha}{2Y}dX$. Write $Y^\prime = \frac{3X^2+\alpha}{2Y}$ for short. Define the following as functions of $P=(X_P, Y_P)$ and $Q=(X_Q,Y_Q)$ to compute the challenge slope.
+
+% The labels for deltaX and deltaY were not referenced at all, so I still used align*
+
+$$\Delta X = X_Q - X_P  \text{ and }  \Delta Y = Y_Q - Y_P,  \text{ so }  \Lambda = \frac{\Delta Y}{\Delta X} \label{BigLambda}$$
+Now we can apply the derivation $d$ to compute the derivative of the challenge slope.
+
+% \begin{align*}
+% \Delta X =& X_Q - X_P \\
+% \Delta Y =& Y_Q - Y_P 
+% \end{align*}
+
+% \begin{align}
+% \Lambda =& \frac{\Delta Y}{\Delta X} \label{BigLambda} 
+% \end{align}
 
 \begin{align}
-\Delta X =& X_Q - X_P \label{deltaX}\\
-\Delta Y =& Y_Q - Y_P \label{deltaY}
-\end{align}
-\begin{align}
-\Lambda =& \frac{\Delta Y}{\Delta X} \label{BigLambda} 
-\end{align}
-\begin{align}
-d\Lambda =& \frac{\Delta X d \Delta Y - \Delta Y d \Delta X}{(\Delta X)^2}\\
-=& \frac{d\Delta Y - \Lambda d \Delta X}{\Delta X} \\
- =& \frac{(dY_Q - \Lambda dX_Q) - (dY_P - \Lambda dX_P)}{\Delta X}\\
+% \Lambda =& \frac{\Delta Y}{\Delta X} \label{BigLambda} \\
+d\Lambda =& \frac{\Delta X d \Delta Y - \Delta Y d \Delta X}{(\Delta X)^2} \nonumber \\
+=& \frac{d\Delta Y - \Lambda d \Delta X}{\Delta X} \nonumber \\
+ =& \frac{(dY_Q - \Lambda dX_Q) - (dY_P - \Lambda dX_P)}{\Delta X} \nonumber \\
 =& \frac{\left(Y^\prime_Q - \Lambda\right)dX_Q - \left(Y^\prime_P - \Lambda\right)dX_P}{\Delta X} \label{dBigLambda}
 \end{align}
-
+Set the challenge line intercept: $M = Y_P - \Lambda X_P \label{bigM}$.
+% \begin{align}
+% M =& Y_P - \Lambda X_P \label{bigM}
+% \end{align}
+Then we have the following derivative of the challenge intercept.
 \begin{align}
-M =& Y_P - \Lambda X_P \label{bigM}
-\end{align}
-
-\begin{align}
-dM =& dY_P - \Lambda dX_P - X_P d\Lambda\\
-=& \left(Y_P^\prime - \Lambda\right) dX_P - X_P d\Lambda\\
-=& \left(Y_P^\prime - \Lambda\right) dX_P - X_P\frac{\left(Y_Q^\prime - \Lambda\right)dX_Q - \left(Y_P^\prime - \Lambda\right)dX_P}{\Delta X} \\
-=& \left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q + \frac{X_P}{\Delta X}\left(Y_P^\prime - \Lambda\right)dX_P\\
-=& \left(1+\frac{X_P}{\Delta X}\right)\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q\\
-=& - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q + \frac{X_Q}{\Delta X}\left(Y_P^\prime - \Lambda\right) dX_P \label{dBigM}
-\end{align}
-
-\begin{align}
-X_R =& \Lambda^2 - X_P - X_Q \label{xr}\\
-Y_R^2 =& X_R^3 + \alpha X_R + \beta \label{yr2}\\
-R =& (X_R, Y_R) \label{r}
-\end{align}
-
-\begin{align}
-dX_R =& 2\Lambda d\Lambda - dX_P - dX_Q \\
-=& \frac{2\Lambda}{\Delta X} \Big( \left(Y_Q^\prime - \Lambda\right)dX_Q - \left(Y_P^\prime - \Lambda\right)dX_P\Big) - dX_P - dX_Q\\
-=& \frac{2\Lambda}{\Delta X}\left(Y_Q^\prime-\Lambda - \Delta X\right)dX_Q - \frac{2\Lambda}{\Delta X}\left(Y_P^\prime-\Lambda + \Delta X\right)dX_P \label{dxr}
+dM =& dY_P - \Lambda dX_P - X_P d\Lambda \nonumber \\
+=& \left(Y_P^\prime - \Lambda\right) dX_P - X_P d\Lambda \nonumber \\
+=& \left(Y_P^\prime - \Lambda\right) dX_P - X_P\frac{\left(Y_Q^\prime - \Lambda\right)dX_Q - \left(Y_P^\prime - \Lambda\right)dX_P}{\Delta X} \nonumber \\
+=& \left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q + \frac{X_P}{\Delta X}\left(Y_P^\prime - \Lambda\right)dX_P \nonumber \\
+=& \left(1+\frac{X_P}{\Delta X}\right)\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q \nonumber \\
+=& \frac{X_Q}{\Delta X}\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q \label{dBigM}
 \end{align}
 
 
+We note that by Vieta's formula (or simply by expanding), we have the following for $X_R$ and its derivative.
+
+$$X_R = \Lambda^2 - X_P - X_Q \quad \Rightarrow \quad dX_R = 2\Lambda d\Lambda - dX_P - dX_Q \label{dxr}$$
+% \begin{align}
+% X_R =& \Lambda^2 - X_P - X_Q \label{xr} \\
+% dX_R =& 2\Lambda d\Lambda - dX_P - dX_Q \label{dxr}
+% \end{align}
+Similarly for $Y_R$ and its derivative.
+$$Y_R^2 = X_R^3 + \alpha X_R + \beta \quad \Rightarrow \quad dY_R = \frac{3X_R^2 + \alpha}{2Y_R} dX_R \label{dyr}$$
+% \begin{align}
+% Y_R^2 =& X_R^3 + \alpha X_R + \beta \\
+% dY_R =& \frac{3X_R^2 + \alpha}{2Y_R} dX_R \label{dyr}
+% \end{align}
+
+
+Now we restrict our attention to a derivation $d$ such that $d(Y_T -\lambda X_T) = 1$ for a fixed $\lambda \in K$ and for $T \in \left\{P, Q\right\}$. Ignoring subscripts, we get the following.
+
+$$1 = dY - \lambda dX \quad \Rightarrow \quad dX = (Y^\prime - \lambda)^{-1}$$
+% \begin{align*}
+% 1 =& dY - \lambda^* dX  \\
+% 1 =& (Y^\prime - \lambda^*) dX \\
+% dX =& (Y^\prime - \lambda^*)^{-1}
+% \end{align*}
+
+
+By applying the above to Equation \ref{dBigLambda} and \ref{dBigM}, one can obtain that $d\Lambda = dM = 0$, so 
 \begin{align}
-dY_R =& \frac{dY_R}{dX_R}dX_R \\
-=& \frac{3X_R^2+\alpha}{2Y_R} dX_R \\
-=& Y_R^\prime dX_R \label{dyr}
+dX_R =& -dX_P - dX_Q \nonumber\\
+=& -\frac{1}{Y_P^\prime - \lambda} - \frac{1}{Y_Q^\prime - \lambda} \\
+dY_R 
+% =& \frac{3X_R^2+\alpha}{2Y_R}dX_R \nonumber\\
+=& \frac{3X_R^2+\alpha}{2Y_R}\left(-dX_P - dX_Q\right) \nonumber \\
+=& -\frac{3X_R^2+\alpha}{2Y_R}\left(\frac{1}{Y_P^\prime - \lambda} + \frac{1}{Y_Q^\prime - \lambda}\right)
 \end{align}
 
 Now we can compute $df(P)$, $df(Q)$, and $df(R)$ as follows. Note our abuse of notation; by $df(P)$, we mean $(d(f))(P)$. That is, the specific function of $df$ evaluated specifically at $P$ rather than the derivation of $f(P)$, which would obviously be 0.
 
 \begin{align}
-df(P) =& f_X(P) dX_P + f_Y(P) dY_P\\
-=& (f_X(P) + f_Y(P)Y_P^\prime)dX_P \label{dfp}\\
-df(Q) =& (f_X(Q) + f_Y(Q)Y_Q^\prime)dX_Q \label{dfq}
+df(P) =& f_X(P) dX_P + f_Y(P) dY_P \nonumber \\
+=& (f_X(P) + f_Y(P)Y_P^\prime)dX_P \nonumber \\
+=& \frac{f_X(P) + f_Y(P)Y_P^\prime}{Y_P^\prime - \lambda}\label{dfp} \\
+df(Q) =& (f_X(Q) + f_Y(Q)Y_Q^\prime)dX_Q \nonumber \\
+=& \frac{f_X(Q) + f_Y(Q)Y_Q^\prime}{Y_Q^\prime - \lambda} \label{dfq} \\
+df(R) 
+% =& f_X(R)dX_R + f_Y(R) dY_R \nonumber \\
+=& (f_X(R) + Y^\prime_R f_Y(R))dX_R \nonumber \\
+=& -(f_X(R) + Y^\prime_R f_Y(R))\cdot \left(\frac{1}{(Y_P^\prime - \lambda)} + \frac{1}{(Y_Q^\prime - \lambda)}\right) \label{dfr}
 \end{align}
+We now compute $\delta(\widehat{f})$ as a rational function of $(X_P, Y_P, X_Q, Y_Q)$. 
 
 \begin{align}
-df(R) =& f_X(R)dX_R + f_Y(R) dY_R \\
-=& (f_X(R) + Y^\prime_R f_Y(R))dX_R \\
-df(R) =& \frac{2\Lambda(f_X(R) + Y^\prime_R f_Y(R))}{\Delta X}\Big(\left(Y_Q^\prime - \Lambda - \Delta X\right) dX_Q  - \left(Y_P^\prime - \Lambda + \Delta X\right)dX_P\Big) \label{dfr}
-\end{align}
-We can now compute $\delta(\widehat{f})$ only as a rational function of $(X_P, Y_P, X_Q, Y_Q)$. 
-
-\begin{align}
-\delta(\widehat{f}) =& \frac{df(P)}{f(P)} + \frac{df(Q)}{f(Q)} + \frac{df(R)}{f(R)}  \\
-=& \frac{df(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}dX_P \\& \quad + \frac{df(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}dX_Q \\
-=& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)dX_P \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)dX_Q  \label{deltawidehatf}
+\delta(\widehat{f}) =& \frac{df(P)}{f(P)} + \frac{df(Q)}{f(Q)} + \frac{df(R)}{f(R)}  \nonumber \\
+=& \frac{f_X(P) + f_Y(P)Y_P^\prime}{(Y_P^\prime - \lambda)f(P)} + \frac{f_X(Q) + f_Y(Q)Y_Q^\prime}{(Y_Q^\prime - \lambda)f(Q)} \nonumber  \\& - \frac{f_X(R) + f_Y(R)Y_R^\prime}{f(R)} \cdot \left(\frac{1}{(Y_P^\prime - \lambda)} + \frac{1}{(Y_Q^\prime - \lambda)}\right) 
+%\label{deltawidehatf}
+\label{deltafhat}
 \end{align}
 
-We are particularly interested in the case that $d(Y-\lambda^* X - \mu^*) = 1$ for some fixed $(\lambda^*, \mu^*) \in K^2$.
 
-\begin{align}
-1 =& dY - \lambda dX  \\
-1 =& (Y^\prime - \lambda) dX \\
-dX =& (Y^\prime - \lambda)^{-1}
-\end{align}
-Note then that $d\Lambda = dM = 0$, and $\delta(\widehat{f})$ becomes the following.
+% \begin{align*}
+% \delta(\widehat{f}) =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)dX_P \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)dX_Q \\
+% =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)(Y_P^\prime - \lambda^*)^{-1} \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)(Y_Q^\prime - \lambda^*)^{-1}
+% \end{align*}
 
-\begin{align}
-\delta(\widehat{f}) =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)dX_P \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)dX_Q \\
-=& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)(Y_P^\prime - \lambda^*)^{-1} \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)(Y_Q^\prime - \lambda^*)^{-1}
-\end{align}
+This is the left-hand side of the verification equation. We can now evaluate $\Lambda$ and $M$ at any pair of points on the curve $P, Q \in \E$ to obtain $\lambda = \Lambda(x_P,y_P, x_Q, y_Q)$ and $\mu^* = M(x_P, y_P, x_Q, y_Q)$, and then substitute $\lambda$ for $\Lambda$ and $\mu^*$ for $M$.
 
-This is the left-hand side of the verification equation. We can now evaluate at any \\
+
+This is the left-hand side of the verification equation. We now evaluate $\delta(\widehat{f})$ at the tuple 
 $(X_P, Y_P, X_Q, Y_Q) = (x_P, y_P, x_Q, y_Q),$ 
-setting $\lambda^* = \Lambda(x_P,y_P, x_Q, y_Q)$, $y_P^\prime = \frac{3x_P^2+\alpha}{2y_P}$ and  $y_Q^\prime = \frac{3x_Q^2+\alpha}{2y_Q}$ to obtain the following.
+setting $\lambda = \Lambda(x_P,y_P, x_Q, y_Q)$, $y_P^\prime = \frac{3x_P^2+\alpha}{2y_P}$, and  $y_Q^\prime = \frac{3x_Q^2+\alpha}{2y_Q}$ to obtain the following.
 \begin{align}
-\delta(\widehat{f})\mid_{P,Q} =& 
-\frac{f_X(P) + y_P^\prime f_Y(P)}{f(P)(y_P^\prime - \lambda^*)}- 
-\frac{2\lambda^*(f_X(R) + y_R^\prime f_Y(R))(y_P^\prime - \lambda - \Delta X)}{f(R)\Delta X(y_P^\prime - \lambda)}  \\
+\delta(\widehat{f}) \bigm\vert_{P,Q} =& 
+\frac{f_X(P) + y_P^\prime f_Y(P)}{f(P)(y_P^\prime - \lambda)}- 
+\frac{2\lambda(f_X(R) + y_R^\prime f_Y(R))(y_P^\prime - \lambda - \Delta X)}{f(R)\Delta X(y_P^\prime - \lambda)} \nonumber  \\
 &  \quad + \frac{f_X(Q) + y_Q^\prime f_X(Q)}{f(Q)(y_Q^\prime - \lambda)} + 
-\frac{2\lambda^*(f_X(R) + y_R^\prime f_Y(R))(y_Q^\prime - \lambda - \Delta X)}{f(R) \Delta X(y_Q^\prime - \lambda)} \label{deltafhat}
+\frac{2\lambda(f_X(R) + y_R^\prime f_Y(R))(y_Q^\prime - \lambda - \Delta X)}{f(R) \Delta X(y_Q^\prime - \lambda)} 
+\end{align}
+This comes directly from the following.
+\begin{align}
+& \frac{df(P)}{f(P)} + \frac{df(Q)}{f(Q)} + \frac{df(R)}{f(R)} \nonumber \\
+=& \left [ \frac{f_X(P) + y'_P f_Y(P)}{f(P)} - \frac{f_X(R)+y_R' f_Y(R)}{f(R)}\right ] \cdot \frac{1}{y_P' - \lambda} \label{TOMATO} \\
+& + \left [ \frac{f_X(Q) + y'_Q f_Y(Q)}{f(Q)} - \frac{f_X(R)+y_R' f_Y(R)}{f(R)}\right ] \cdot \frac{1}{y_Q' - \lambda} \label{ONION}
+\end{align}
+Then \ref{TOMATO} equals the term
+$$\frac{f_X(P)f(R) + y_P' f_Y(P) f(R) - f_X(R) f(P) - y_R' f_Y(R)f(P)}{f(P)f(R)(y_P'- \lambda)}$$
+and \ref{ONION} equals the term
+$$\frac{f_X(Q)f(R) + y_Q' f_Y(Q) f(R) - f_X(R) f(Q) - y_R' f_Y(R)f(Q)}{f(Q)f(R)(y_Q'- \lambda)}$$
+
+Now, the least common multiple for the denominators in Equations \ref{TOMATO} and \ref{ONION} is  $f(P)f(Q)f(R)(y_P' - \lambda)(y_Q' - \lambda)$, so this will be the denominator of their sum in reduced form, while the numerator will be the following.
+\begin{align*}
+    & f(Q)f(R)f_X(P)y_Q' + f(Q)f(R)f_Y(P)y_P'y_Q' - f(P)f(Q)f_X(R)y'_Q - f(P)f(Q)f_Y(R)y_Q'y_R' \\
+    &-f(Q)f(R)f_X(P) \lambda -f(Q)f(R)f_Y(P)y_P' \lambda +f(P)f(Q)f_X(R) \lambda +f(P)f(Q)f_Y(R)y_R' \lambda \\
+    &+ f(P)f(R)f_X(Q)y_P' +f(P)f(R)f_Y(Q)y_P'y_Q' - f(P)f(Q)f_X(R)y_P' - f(P)f(Q)f_Y(R)y_P'y_R' \\
+    & -f(P)f(R)f_X(Q) \lambda - f(P)f(R)f_Y(Q)y_Q' \lambda + f(P)f(Q)f_X(R) \lambda + f(P)f(Q)f_Y(R)y_R' \lambda
+\end{align*}
+
+Certainly $y_T' = \frac{3x_T^2 + \alpha}{2y_T}$, so we can substitute into each of the equations given above. To simplify the expressions, we factor out $\frac{1}{4y_Py_Qy_R}$ to clear the denominators and use $\Gamma_T = 3x_T^2 + \alpha$ as defined in step \ref{prove6} of the $\texttt{Prove}$ algorithm.
+Then the numerator takes the following beastly expression.
+\begin{align}
+& f(Q)f(R)f_X(P)2y_py_R \Gamma_Q +
+f(Q)f(R)f_Y(P)y_R\Gamma_P\Gamma_Q - 
+f(P)f(Q)f_X(R)2y_Py_R\Gamma_Q  \nonumber \\& - f(P)f(Q)f_Y(R)y_P \Gamma_Q \Gamma_R -
+f(Q)f(R)f_X(P)4 \lambda y_P y_Q y_R -
+f(Q)f(R)f_Y(P)2 \lambda y_Q y_R \Gamma_P   \nonumber \\& +
+f(P)f(Q)f_X(R)4 \lambda y_P y_Q y_R + 
+f(P)f(Q)f_Y(R) 2 \lambda y_P y_Q \Gamma_R +  f(P)f(R)f_X(Q)2y_Q y_R \Gamma_P   \nonumber  \\& +f(P)f(R)f_Y(Q)y_R \Gamma_P \Gamma_Q - f(P)f(Q)f_X(R)2 y_R y_Q \Gamma_P - f(P)f(Q)f_Y(R) y_Q \Gamma_P \Gamma_R   \nonumber \\ 
+& -f(P)f(R)f_X(Q) 4 \lambda y_P y_Q y_R - f(P)f(R)f_Y(Q)2 \lambda y_P y_R \Gamma_Q + f(P)f(Q)f_X(R) 4 \lambda y_P y_Q y_R   \nonumber \\& +f(P)f(Q)f_Y(R)2 \lambda y_P y_Q \Gamma_R \label{verifnumerator}
 \end{align}
 
-\subsection{Logarithmic derivative of a line at the zeroes and poles of a function field element.}
+
+Since the denominator is
+$4 y_P y_R y_Q f(P)f(Q)f(R)(y_P' - \lambda)(y_Q' - \lambda)$ and $2y_Ty_T^\prime = \Gamma_T$, we reduce by distributing $2y_P$ and $2y_Q$:
+$$y_R f(P) f(Q) f(R)(\Gamma_P - 2 \lambda y_P)(\Gamma_Q - 2 \lambda y_Q)$$
+Now, take the numerator terms and group them by the derivatives:
+\begin{align}
+ & f(P)f(Q)f_X(R)(8 \lambda y_P y_Q y_R - 2 y_P y_R \Gamma_Q - 2 y_R y_Q \Gamma_P) \label{verf1} \\
+ & f(P)f(Q)f_Y(R)(4 \lambda y_P y_Q \Gamma_R - y_P \Gamma_Q \Gamma_R - y_Q \Gamma_P \Gamma_R) \label{verf2} \\
+ & f(Q)f(R)f_X(P)(2 y_P y_R \Gamma_Q - 4 \lambda y_P y_Q y_R) \label{verf3} \\
+ & f(Q)f(R)f_Y(P)(y_R \Gamma_P \Gamma_Q - 2 \lambda y_Q y_R \Gamma_P) \label{verf4} \\
+ & f(P)f(R)f_X(Q)(2 y_Q y_R \Gamma_P - 4 \lambda y_P y_Q y_R) \label{verf5} \\
+ & f(P)f(R)f_Y(Q)(y_R \Gamma_P \Gamma_Q - 2 \lambda y_P y_R \Gamma_Q) \label{verf6}
+\end{align}
+Thus, the verification equation is the sum of terms \ref{verf1} through \ref{verf6} above, divided by the denominator:
+$$y_R f(P) f(Q) f(R)(\Gamma_P - 2 \lambda y_P)(\Gamma_Q - 2 \lambda y_Q).$$ 
+
+Finally, we notice that we can rewrite the denominator, by replacing $\lambda$ with $\frac{\Delta Y}{\Delta X}$, as:
+$$\frac{1}{(\Delta X)^2} \cdot (y_R f(P)f(Q)f(R)(\Gamma_P\Delta X - 2 y_P \Delta Y)(\Gamma_Q\Delta X - 2 y_Q \Delta Y))$$
+Now, we multiply the numerator and denominator by $(\Delta X)^2$, to clear this division. This will turn terms \ref{verf1} through \ref{verf6} into the following, where we highlight like terms on the right hand side:
+
+
+
+\begin{align}
+ & \non \label{verf7} \\
+ & \ntw \label{verf8} \\
+ & \nth \label{verf9} \\
+ & \nfo \label{verf10} \\
+ & \nfi \label{verf11} \\
+ & \nsi \label{verf12}
+\end{align}
+
+Then $\delta(\widehat{f}) \bigm\vert_{P,Q}$ is the sum of terms \ref{verf7} through \ref{verf12}, divided by the following:
+
+$$y_R f(P)f(Q)f(R)(\Gamma_P\Delta X - 2 y_P \Delta Y)(\Gamma_Q\Delta X - 2 y_Q \Delta Y).$$
+
+Thus, we have obtained an expression for $\delta(\widehat{f}) \bigm\vert_{P,Q}$ as a rational function.
+
+
+
+% \begin{enumerate}
+%     \item $$f(P)f(Q)f_X(R)(8y_Py_Qy_R \Delta X \Delta Y + 2y_P y_R (\Delta X)^2 - 2y_Q y_R S_P (\Delta X)^2)$$
+%     \item $$$$
+%     \item $$$$
+%     \item $$$$ 
+%     \item $$$$ 
+%     \item $$$$
+% \end{enumerate}
+
+\subsection{Logarithmic Derivative of a Line at the Zeroes and Poles of a Function Field Element}
 
 In this section, we consider the flip side of Weil reciprocity. Rather than looking at $f(P)f(Q)f(R)$ for a given $f$ as a function of $P$ and $Q$, we look at $\prod_T \ell(T)^{\nu(T)}$ as a function of coefficients of $\ell$.
 
-Indeed, the other side of Weil's reciprocity is $\widehat{\ell}(\text{div}(f)) = \prod_T \ell(T)^{\nu(T)}$.
+Indeed, the other side of Weil reciprocity is $\widehat{\ell}(\text{div}(f)) = \prod_T \ell(T)^{\nu(T)}$.
 As above, consider the function $\prod_T \ell(T)^{\nu(T)}$ as an evaluation of some $\widehat{\ell}(X_P, Y_P, X_Q, Y_Q) \in F$. 
-Let $\widetilde{\ell} = Y - \Lambda X - M$, where $\Lambda$ is as in Equation (\ref{BigLambda}) and $M$ is as in Equation (\ref{bigM}). Say $\text{div}(f)$ is the principal divisor $\sum_{i=1}^{n} \nu_i [T_i] - \nu_0[O]$ where $\nu_0 = \sum_{i=1}^{n} \nu_i$ and each $T_i = (x_i, y_i) \in \E$. Define $\widetilde{\ell}_i = \widetilde{\ell}(x_i, y_i, X_P, Y_P, X_Q, Y_Q) = y_i - \Lambda x_i - M$. Define $\underline{\ell} = \prod_{i=1}^{n} \widetilde{\ell}_i(T_i)^{\nu_i}$. 
+Let $\widetilde{\ell} = Y - \Lambda X - M$, where $\Lambda$ and $M$ are as in Appendix \ref{AppendixOne}. Say $\text{div}(f)$ is the principal divisor $\sum_{i=1}^{n} \nu_i [T_i] - \nu_0[O]$ where $\nu_0 = \sum_{i=1}^{n} \nu_i$ and each $T_i = (x_i, y_i) \in \E$. Define $\widetilde{\ell}_i = \widetilde{\ell}(x_i, y_i, X_P, Y_P, X_Q, Y_Q) = y_i - \Lambda x_i - M$. Define $\underline{\ell} = \prod_{i=1}^{n} \widetilde{\ell}_i(T_i)^{\nu_i}$. 
 Then $\ell(\text{div}(f))$ is an evaluation of $\widehat{\ell}$ at $P = (x_P, y_P)$ and $Q=(x_Q, y_Q)$.  
 
 \begin{align}
-\underline{\ell} =& \prod_{i=1}^{n} \widetilde{\ell}_i(T_i)^{\nu_i} \\
-=& \prod_{i=1}^{n} (y_i - \Lambda x_i - M)^{\nu_i}\\
-\delta(\underline{\ell}) =& \sum_{i=1}^{n} \nu_i \frac{d\left(y_i - \Lambda x_i - M\right)}{y_i - \Lambda x_i - M} \\
-=& \sum_i \nu_i \frac{dy_i - \Lambda dx_i - x_i d\Lambda - dM}{y_i - \Lambda x_i - M}\\
-=& \sum_i \nu_i \frac{(y_i^\prime - \Lambda)dx_i - x_i d\Lambda - dM}{y_i - \Lambda x_i - M} \\
-=& \sum_i \nu_i \frac{1 - x_i d\Lambda - dM}{y_i - \Lambda x_i - M} \\
-=& \sum_i \nu_i (y_i - \Lambda x_i - M)^{-1}  \label{delta_ell}
-\end{align} where we refer to Equations (\ref{BigLambda}), (\ref{bigM}), (\ref{dBigLambda}), and (\ref{dBigM}) for $\Lambda$, $M$, $d\Lambda$, and $dM$, respectively.
+\underline{\ell} =& \prod_{i=1}^{n} \widetilde{\ell}_i(T_i)^{\nu_i} \nonumber \\
+=& \prod_{i=1}^{n} (y_i - \Lambda x_i - M)^{\nu_i} \nonumber \\
+\delta(\underline{\ell}) =& \sum_{i=1}^{n} \nu_i \frac{d\left(y_i - \Lambda x_i - M\right)}{y_i - \Lambda x_i - M} \nonumber \\
+=& \sum_i \nu_i \frac{dy_i - \Lambda dx_i - x_i d\Lambda - dM}{y_i - \Lambda x_i - M} \nonumber \\
+=& \sum_i \nu_i \frac{(y_i^\prime - \Lambda)dx_i - x_i d\Lambda - dM}{y_i - \Lambda x_i - M} \nonumber \\
+=& \sum_i \nu_i \frac{1 - x_i d\Lambda - dM}{y_i - \Lambda x_i - M} \nonumber \\
+=& \sum_i \nu_i (y_i - \Lambda x_i - M)^{-1} \nonumber\\
+=& \sum_i \nu_i \Delta X(y_i \Delta X - x_i \Delta Y - M \Delta X)^{-1} \label{delta_ell}
+\end{align} where we refer to Appendix \ref{AppendixOne} for $\Lambda$, $M$, $d\Lambda$, and $dM$, respectively.
 These $x_i, y_i$ are fixed elements of $K$, and $d$ is a derivation over $K$, so $dx_i = dy_i = 0$, explaining the last step. 
 % These $d\Lambda$ and $dM$ are as in Equations (\ref{dslope}) and (\ref{dintercept}), respectively\footnote{}. 
+
+
+% \subsection{Brandon's rewrite of derivation of verif eqns}
+
+
+% In this section, we formalize taking the logarithmic derivative of $f(P)f(Q)f(R)$ for collinear, distinct, non-identity points $P, Q, R \in \E$. Indeed, for any $T \in \mathcal{E}$, $f(T)$ is just an element of $K$, and so $dT = 0$, yet a variable point is a rational function of transcendental elements with non-zero derivation in general.
+
+% Recall that any points $P, Q, R$ which are collinear, distinct, and non-identity necessarily satisfy $P + Q + R = O$ in the group law.
+
+% To handle  $P, Q, R$ as variable points on the curve $\E$, say by introducing transcendental elements $X_P$, $Y_P$, $X_Q$, and $Y_Q$, where $X_P$ corresponds to the $x$-coordinate of (variable) point $P$, and $Y_P$ is the $y$-coordinate of $P$, and similarly for (variable) point $Q$. Then a derivation on $K(\E)$ extends naturally to a derivation on $K(\E^2)$ via partial derivations $\frac{\partial}{\partial X_P}$, $\frac{\partial}{\partial X_Q}$, $\frac{\partial}{\partial Y_P}$, and $\frac{\partial}{\partial Y_Q}$.
+
+% Given $P$ and $Q$ such that $P \neq Q$ and such that the interpolating line betwixt them isn't tangent to $\E$, there is a unique $R$ satisfying $P + Q + R = O$, so we only need transcendentals $X_P$, $Y_P$, $X_Q$, and $Y_Q$ to determine $X_R$ and $Y_R$; moreover these are rational functions in $X_P$, $Y_P$, $X_Q$, and $Y_Q$.
+
+% Note that although these are all transcendental over $K$, they are not indeterminates and satisfy algebraic relationships between each other, such as the Weierstrass equation $Y^2 = X^3 + \alpha X + \beta$ or the relationship that $Y$ is uniquely determined by $X$ up to sign. 
+
+% We start with an arbitrary derivation $d$ over $K$ on the function field $K(\E)$. Since $Y^2 - X^3 - \alpha X - \beta = 0$, we have $dY = \frac{3X^2+\alpha}{2Y}dX$. Write $Y^\prime = \frac{3X^2+\alpha}{2Y}$ for short. Define the following as functions of $P=(X_P, Y_P)$ and $Q=(X_Q,Y_Q)$:
+
+% % The labels for deltaX and deltaY were not referenced at all, so I still used align*
+
+% $$\Delta X = X_Q - X_P  \text{ and }  \Delta Y = Y_Q - Y_P,  \text{ so }  \Lambda = \frac{\Delta Y}{\Delta X} \label{BigLambda}$$
+
+% % \begin{align*}
+% % \Delta X =& X_Q - X_P \\
+% % \Delta Y =& Y_Q - Y_P 
+% % \end{align*}
+
+% % \begin{align}
+% % \Lambda =& \frac{\Delta Y}{\Delta X} \label{BigLambda} 
+% % \end{align}
+
+% \begin{align}
+% % \Lambda =& \frac{\Delta Y}{\Delta X} \label{BigLambda} \\
+% d\Lambda =& \frac{\Delta X d \Delta Y - \Delta Y d \Delta X}{(\Delta X)^2} \nonumber \\
+% =& \frac{d\Delta Y - \Lambda d \Delta X}{\Delta X} \nonumber \\
+%  =& \frac{(dY_Q - \Lambda dX_Q) - (dY_P - \Lambda dX_P)}{\Delta X} \nonumber \\
+% =& \frac{\left(Y^\prime_Q - \Lambda\right)dX_Q - \left(Y^\prime_P - \Lambda\right)dX_P}{\Delta X} \label{dBigLambda}
+% \end{align}
+
+
+% % \begin{align}
+% % M =& Y_P - \Lambda X_P \label{bigM}     
+% % \end{align}
+
+% \begin{align}
+% \text{Set } M =& Y_P - \Lambda X_P \label{bigM}. \text{ Then, } \\
+% dM =& dY_P - \Lambda dX_P - X_P d\Lambda \nonumber \\
+% =& \left(Y_P^\prime - \Lambda\right) dX_P - X_P d\Lambda \nonumber \\
+% =& \left(Y_P^\prime - \Lambda\right) dX_P - X_P\frac{\left(Y_Q^\prime - \Lambda\right)dX_Q - \left(Y_P^\prime - \Lambda\right)dX_P}{\Delta X} \nonumber \\
+% =& \left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q + \frac{X_P}{\Delta X}\left(Y_P^\prime - \Lambda\right)dX_P \nonumber \\
+% =& \left(1+\frac{X_P}{\Delta X}\right)\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q \nonumber \\
+% =& \frac{X_Q}{\Delta X}\left(Y_P^\prime - \Lambda\right) dX_P - \frac{X_P}{\Delta X} \left(Y_Q^\prime - \Lambda\right)dX_Q \label{dBigM}
+% \end{align}
+
+
+% $$X_R = \Lambda^2 - X_P - X_Q, \text{ therefore } \label{xr}
+% dX_R = 2\Lambda d\Lambda - dX_P - dX_Q $$
+
+% % \begin{align}
+% % X_R =& \Lambda^2 - X_P - X_Q \label{xr}\\
+% % dX_R =& 2\Lambda d\Lambda - dX_P - dX_Q \nonumber 
+% % \end{align}
+
+% $$Y_R^2 = X_R^3 + \alpha X_R + \beta, \text{ hence } dY_R = \frac{3X_R^2 + \alpha}{2Y_R} \label{dyr}$$
+
+% % \begin{align}
+% % Y_R^2 =& X_R^3 + \alpha X_R + \beta \\
+% % 2Y_RdY_R =& 3X_R^2 + \alpha \nonumber\\
+% % dY_R =& \frac{3X_R^2 + \alpha}{2Y_R} \label{dyr}
+% % \end{align}
+
+
+% $$dY_R = \frac{3X_R^2+\alpha}{2Y_R} dX_R = Y_R^\prime dX_R \label{dyr}$$
+
+% % \begin{align}
+% % dY_R =& \frac{dY_R}{dX_R}dX_R \nonumber \\
+% % =& \frac{3X_R^2+\alpha}{2Y_R} dX_R \text{\free{ this was already stated in the above paragraph}} \nonumber \\
+% % =& Y_R^\prime dX_R \label{dyr}
+% % \end{align}
+
+% Now we restrict our attention to a derivation $d$ such that $d(Y_T -\lambda^* X_T) = 1$ for a fixed $\lambda^* \in K$ and for $T \in \left\{P, Q\right\}$. Ignoring subscripts, we get the following.
+
+% $$1 = dY - \lambda^* dX \quad \Rightarrow \quad dX = (Y^\prime - \lambda^*)^{-1}$$
+% % \begin{align*}
+% % 1 =& dY - \lambda^* dX  \\
+% % 1 =& (Y^\prime - \lambda^*) dX \\
+% % dX =& (Y^\prime - \lambda^*)^{-1}
+% % \end{align*}
+% We immediately obtain $d\Lambda = dM = 0$, so 
+% \begin{align}
+% dX_R =& -dX_P - dX_Q \nonumber\\
+% =& -\frac{1}{(Y_P^\prime - \lambda^*)} - \frac{1}{(Y_Q^\prime - \lambda^*)} \\
+% dY_R 
+% % =& \frac{3X_R^2+\alpha}{2Y_R}dX_R \nonumber\\
+% =& \frac{3X_R^2+\alpha}{2Y_R}\left(-dX_P - dX_Q\right) \nonumber \\
+% =& -\frac{3X_R^2+\alpha}{2Y_R}\left(\frac{1}{(Y_P^\prime - \lambda^*)} + \frac{1}{(Y_Q^\prime - \lambda^*)}\right)
+% % =& -\frac{3X_R^2+\alpha}{2Y_R} \cdot\frac{Y_Q^\prime + Y_P^\prime - 2\lambda^*}{(Y_P^\prime-\lambda^*)(Y_Q^\prime-\lambda^*)} 
+% \end{align}
+
+% Now we can compute $df(P)$, $df(Q)$, and $df(R)$ as follows. Note our abuse of notation; by $df(P)$, we mean $(d(f))(P)$. That is, the specific function of $df$ evaluated specifically at $P$ rather than the derivation of $f(P)$, which would obviously be 0.
+
+% \begin{align}
+% df(P) =& f_X(P) dX_P + f_Y(P) dY_P \nonumber \\
+% =& (f_X(P) + f_Y(P)Y_P^\prime)dX_P \nonumber \\
+% =& \frac{f_X(P) + f_Y(P)Y_P^\prime}{Y_P^\prime - \lambda^*}\label{dfp} \\
+% df(Q) =& (f_X(Q) + f_Y(Q)Y_Q^\prime)dX_Q \nonumber \\
+% =& \frac{f_X(Q) + f_Y(Q)Y_Q^\prime}{Y_Q^\prime - \lambda^*} \label{dfq} \\
+% df(R) 
+% % =& f_X(R)dX_R + f_Y(R) dY_R \nonumber \\
+% =& (f_X(R) + Y^\prime_R f_Y(R))dX_R \nonumber \\
+% =& -(f_X(R) + Y^\prime_R f_Y(R))\cdot \left(\frac{1}{(Y_P^\prime - \lambda^*)} + \frac{1}{(Y_Q^\prime - \lambda^*)}\right) \label{dfr}
+% \end{align}
+% We now compute $\delta(\widehat{f})$ as a rational function of $(X_P, Y_P, X_Q, Y_Q)$. 
+
+% \begin{align}
+% \delta(\widehat{f}) =& \frac{df(P)}{f(P)} + \frac{df(Q)}{f(Q)} + \frac{df(R)}{f(R)}  \nonumber \\
+% =& \frac{f_X(P) + f_Y(P)Y_P^\prime}{(Y_P^\prime - \lambda^*)f(P)} + \frac{f_X(Q) + f_Y(Q)Y_Q^\prime}{(Y_Q^\prime - \lambda^*)f(Q)}  - \frac{f_X(R) + f_Y(R)Y_R^\prime}{f(R)} \cdot \left(\frac{1}{(Y_P^\prime - \lambda^*)} + \frac{1}{(Y_Q^\prime - \lambda^*)}\right) 
+% %\label{deltawidehatf}
+% \label{deltafhat}
+% \end{align}
+
+
+% % \begin{align*}
+% % \delta(\widehat{f}) =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)dX_P \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)dX_Q \\
+% % =& \left(\frac{f_X(P) + Y_P^\prime f_Y(P)}{f(P)}- \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_P^\prime - \Lambda - \Delta X)}{f(R)\Delta X}\right)(Y_P^\prime - \lambda^*)^{-1} \\&  \quad + \left(\frac{f_X(Q) + Y_Q^\prime f_X(Q)}{f(Q)} + \frac{2\Lambda(f_X(R) + Y_R^\prime f_Y(R))(Y_Q^\prime - \Lambda - \Delta X)}{f(R) \Delta X}\right)(Y_Q^\prime - \lambda^*)^{-1}
+% % \end{align*}
+
+% This is the left-hand side of the verification equation. We can now evaluate $\Lambda$ and $M$ at any pair of points on the curve $P, Q \in \E$ to obtain $\lambda^* = \Lambda(x_P,y_P, x_Q, y_Q)$.
+
+
 
 
 
